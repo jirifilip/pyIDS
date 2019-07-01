@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import random
 
-from sklearn.metrics import accuracy_score
+from sklearn.metrics import accuracy_score, auc, roc_auc_score
 
 from pyids.ids_rule import IDSRule
 from pyids.ids_ruleset import IDSRuleSet
@@ -12,7 +12,9 @@ from pyids.ids_optimizer import RSOptimizer, SLSOptimizer
 from pyids.ids_cacher import IDSCacher
 from pyids.ids_classifier import IDS
 
+
 from pyarc.qcba import *
+
 
 import cProfile
 
@@ -78,6 +80,6 @@ print(soln_set)
 ids = IDS()
 ids.fit(quant_df, cars[:40])
 
-acc = ids.score(quant_df)
+acc = ids.score(quant_df, metric=accuracy_score)
 
 print(acc)

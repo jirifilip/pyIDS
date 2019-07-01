@@ -30,24 +30,32 @@ class IDSClassifier:
 
 
         y_pred = []
-        top_f1_score = sorted(y_pred_dict.keys(), reverse=True)[0]
+
+        if y_pred_dict:
+            top_f1_score = sorted(y_pred_dict.keys(), reverse=True)[0]
 
 
-        for subscript in range(len(Y)):
-            v_list = []
-            for k, v in y_pred_dict.items():
-                v_list.append(v[subscript])
-            set_v_list = set(v_list)
+            for subscript in range(len(Y)):
+                v_list = []
+                for k, v in y_pred_dict.items():
+                    v_list.append(v[subscript])
+                set_v_list = set(v_list)
+            
+                if list(set_v_list)[0] == IDSRule.DUMMY_LABEL:         # "For data points that satisfy zero itemsets, we predict the majority class label in the training data,"
+                    y_pred.append(mode(Y).mode[0])
+                elif len(list(set_v_list)) - 1 >  len(set(Y)): # "and for data points that satisfy more than one itemset, we predict using the rule with the highest F1 score on the training data."
+                    y_pred.append(y_pred_dict[top_f1_score][subscript])
+                else:                                          # unique
+                    y_pred.append(list(set(v_list))[0])
         
-            if list(set_v_list)[0] == IDSRule.DUMMY_LABEL:         # "For data points that satisfy zero itemsets, we predict the majority class label in the training data,"
-                y_pred.append(mode(Y).mode[0])
-            elif len(list(set_v_list)) - 1 >  len(set(Y)): # "and for data points that satisfy more than one itemset, we predict using the rule with the highest F1 score on the training data."
-                y_pred.append(y_pred_dict[top_f1_score][subscript])
-            else:                                          # unique
-                y_pred.append(list(set(v_list))[0])
     
-        return y_pred
+            return y_pred
 
+        else:
+            for _ in range(len(Y)):
+                y_pred.append(mode(Y).mode[0])
+
+            return y_pred
 
 
 
@@ -57,9 +65,9 @@ class IDS:
         self.clf = None
     
 
-    def fit(self, quant_dataframe, class_association_rules, lambda_array=7*[1]):
+    def fit(self, quant_dataframe, class_association_rules, lambda_array=7*[1], debug=True):
         if type(quant_dataframe) != QuantitativeDataFrame:
-            print("Type of quant_dataframe must be QuantitativeDataFrame")
+            raise Exception("Type of quant_dataframe must be QuantitativeDataFrame")
 
 
         ids_rules = list(map(IDSRule, class_association_rules))
@@ -69,12 +77,12 @@ class IDS:
         all_rules = IDSRuleSet(ids_rules)
         params.params["all_rules"] = all_rules
         params.params["quant_dataframe"] = quant_dataframe
-        params.params["lambda_array"] = 7*[1]
+        params.params["lambda_array"] = lambda_array
         
         # objective function
         objective_function = IDSObjectiveFunction(objective_func_params=params)
 
-        optimizer = SLSOptimizer(objective_function, params)
+        optimizer = SLSOptimizer(objective_function, params, debug=debug)
 
         solution_set = optimizer.optimize()
 

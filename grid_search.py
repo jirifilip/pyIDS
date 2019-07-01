@@ -6,6 +6,7 @@ from pyarc.qcba import QuantitativeDataFrame
 from pyids import IDS
 
 
-pd.read_csv("")
-
 ids = IDS()
+
+
+lambda1 = np.logspace(6)

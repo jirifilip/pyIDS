@@ -30,14 +30,16 @@ class RSOptimizer:
 
 class SLSOptimizer:
     
-    def __init__(self, objective_function, objective_func_params):
+    def __init__(self, objective_function, objective_func_params, debug=True):
         self.delta = 0.33
         self.objective_function_params = objective_func_params 
         self.objective_function = objective_function
         self.rs_optimizer = RSOptimizer(self.objective_function_params.params["all_rules"].ruleset)
+        self.debug = debug
     
     def compute_OPT(self):
         solution_set = self.rs_optimizer.optimize()
+        
         return self.objective_function.evaluate(IDSRuleSet(solution_set))
     
     def estimate_omega_for_element(self, rule, solution_set, error_threshold, delta):
@@ -72,7 +74,9 @@ class SLSOptimizer:
             variance_Exp1 = np.var(Exp1_func_vals)
             variance_Exp2 = np.var(Exp2_func_vals)
             std_err = math.sqrt(variance_Exp1/len(Exp1_func_vals) + variance_Exp2/len(Exp2_func_vals))
-            print("Standard Error "+str(std_err))
+            
+            if self.debug:
+                print("Standard Error "+str(std_err))
 
             if std_err <= error_threshold:
                 break
@@ -117,30 +121,28 @@ class SLSOptimizer:
     
     def optimize_delta(self, delta, delta_prime):
         all_rules = self.objective_function_params.params["all_rules"]
-        print("all_rules")
         OPT = self.compute_OPT()
-        print("OPT")
         n = len(all_rules)
 
         soln_set = IDSRuleSet(set())
-        
-        print("2/(n*n) OPT value is ", 2.0/(n*n)*OPT)
+
+        if self.debug:        
+            print("2/(n*n) OPT value is ", 2.0/(n*n)*OPT)
 
         
         restart_omega_computations = False
     
         while(True):
-            print("1")
-
             # step 2 & 3: for each element estimate omega within certain error_threshold; if estimated omega > 2/n^2 * OPT, then add 
             # the corresponding rule to soln set and recompute omega estimates again
             omega_estimates = []
             for rule in all_rules.ruleset:
 
-                print("Estimating omega for rule "+str(rule))
+                if self.debug:
+                    print("Estimating omega for rule "+str(rule))
+                
                 omega_est = self.estimate_omega_for_element(rule, soln_set, 1.0/(n*n) * OPT, delta)
                 omega_estimates.append(omega_est)
-                #print("Omega estimate is "+str(omega_est))
 
                 if rule in soln_set.ruleset:
                     continue
@@ -149,9 +151,11 @@ class SLSOptimizer:
                     # add this element to solution set and recompute omegas
                     soln_set.ruleset.add(rule)
                     restart_omega_computations = True
-                    print("-----------------------")
-                    print("Adding to the solution set rule "+str(rule))
-                    print("-----------------------")
+                    
+                    if self.debug:
+                        print("-----------------------")
+                        print("Adding to the solution set rule "+str(rule))
+                        print("-----------------------")
                     break    
 
             if restart_omega_computations: 
@@ -164,7 +168,8 @@ class SLSOptimizer:
                     soln_set.ruleset.remove(rule_ind)
                     restart_omega_computations = True
 
-                    print("Removing from the solution set rule "+str(rule_ind))
+                    if self.debug:
+                        print("Removing from the solution set rule "+str(rule_ind))
                     break
 
             if restart_omega_computations: 
