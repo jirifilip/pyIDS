@@ -1,4 +1,4 @@
-#pyIDS
+# pyIDS
 
 pyIDS is custom implementation of IDS (Interpretable Decision Sets) algorithm introduced in
 
