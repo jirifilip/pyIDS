@@ -16,28 +16,34 @@ class ObjectiveFunctionParameters():
 
 class IDSObjectiveFunction:
     
-    def __init__(self, objective_func_params=ObjectiveFunctionParameters()):
+    def __init__(self, objective_func_params=ObjectiveFunctionParameters(), cacher=None, scale_factor=1):
         self.objective_func_params = objective_func_params
+        self.scale_factor = scale_factor
+
 
         all_rules = self.objective_func_params.params["all_rules"]
         quant_dataframe = self.objective_func_params.params["quant_dataframe"]
 
-        self.cacher = IDSCacher()
-        self.cacher.calculate_overlap(all_rules, quant_dataframe)
+        if not cacher:
+            self.cacher = IDSCacher()
+            self.cacher.calculate_overlap(all_rules, quant_dataframe)
+        else:
+            self.cacher = cacher
+
 
     
     def f0(self, solution_set):
-        all_rules = self.objective_func_params.params["all_rules"]
+        len_all_rules = self.objective_func_params.params["len_all_rules"]
 
-        f0 = len(all_rules) - len(solution_set)
+        f0 = len_all_rules - len(solution_set)
 
         return f0
     
     def f1(self, solution_set):
         L_max = solution_set.max_rule_length()
-        all_rules = self.objective_func_params.params["all_rules"]
+        len_all_rules = self.objective_func_params.params["len_all_rules"]
 
-        f1 = L_max * len(all_rules) - solution_set.sum_rule_length()
+        f1 = L_max * len_all_rules - solution_set.sum_rule_length()
 
         return f1
 
@@ -46,9 +52,8 @@ class IDSObjectiveFunction:
     def f2(self, solution_set):
         overlap_intraclass_sum = 0
 
-        n = len(solution_set)
-        all_rules = self.objective_func_params.params["all_rules"]
         quant_dataframe = self.objective_func_params.params["quant_dataframe"]
+        len_all_rules = self.objective_func_params.params["len_all_rules"]
 
 
         for i, r1 in enumerate(solution_set.ruleset):
@@ -62,7 +67,7 @@ class IDSObjectiveFunction:
                     overlap_intraclass_sum += overlap_tmp
                     
 
-        f2 = quant_dataframe.dataframe.shape[0] * len(all_rules) ** 2 - overlap_intraclass_sum
+        f2 = quant_dataframe.dataframe.shape[0] * len_all_rules ** 2 - overlap_intraclass_sum
 
         return f2
 
@@ -71,8 +76,8 @@ class IDSObjectiveFunction:
         overlap_interclass_sum = 0
 
         n = len(solution_set)
-        all_rules = self.objective_func_params.params["all_rules"]
         quant_dataframe = self.objective_func_params.params["quant_dataframe"]
+        len_all_rules = self.objective_func_params.params["len_all_rules"]
 
 
         for i, r1 in enumerate(solution_set.ruleset):
@@ -86,7 +91,7 @@ class IDSObjectiveFunction:
                     overlap_interclass_sum += overlap_tmp
                     
 
-        f3 = quant_dataframe.dataframe.shape[0] * len(all_rules) ** 2 - overlap_interclass_sum
+        f3 = quant_dataframe.dataframe.shape[0] * len_all_rules ** 2 - overlap_interclass_sum
 
         return f3
 
@@ -102,14 +107,14 @@ class IDSObjectiveFunction:
 
 
     def f5(self, solution_set):
-        all_rules = self.objective_func_params.params["all_rules"]
         quant_dataframe = self.objective_func_params.params["quant_dataframe"]
+        len_all_rules = self.objective_func_params.params["len_all_rules"]
         sum_incorrect_cover = 0
 
         for rule in solution_set.ruleset:
             sum_incorrect_cover += np.sum(rule.incorrect_cover(quant_dataframe))
 
-        f5 = quant_dataframe.dataframe.shape[0] * len(all_rules) - sum_incorrect_cover
+        f5 = quant_dataframe.dataframe.shape[0] * len_all_rules - sum_incorrect_cover
 
         return f5
 
@@ -140,7 +145,11 @@ class IDSObjectiveFunction:
         f5 = self.f5(solution_set)
         f6 = self.f6(solution_set)
 
-        result = l[0] * f0 + l[1] * f1 + l[2] + f2 + l[3] * f3 + l[4] * f4 + l[5] * f5 + l[6] * f6
+        fs = np.array([
+            f0, f1, f2, f3, f4, f5, f6
+        ])/self.scale_factor
+
+        result = np.dot(l, fs)
 
 
         return result

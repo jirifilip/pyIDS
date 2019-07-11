@@ -92,7 +92,7 @@ class IDSRule:
         cover1 = self.cover(quant_dataframe)
         cover2 = other.cover(quant_dataframe)
 
-        overlap = cover1 & cover2
+        overlap = np.logical_and(cover1, cover2)
 
         return overlap
 
@@ -129,7 +129,7 @@ class IDSRule:
 
         class_column_cover = quant_dataframe.dataframe.iloc[:,-1].values == self.car.consequent.value
 
-        return rule_cover & class_column_cover
+        return np.logical_and(rule_cover, class_column_cover)
 
 
 
@@ -142,4 +142,4 @@ class IDSRule:
 
         class_column_cover = quant_dataframe.dataframe.iloc[:,-1].values != self.car.consequent.value
 
-        return rule_cover & class_column_cover
+        return np.logical_and(rule_cover, class_column_cover)

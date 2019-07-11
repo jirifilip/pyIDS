@@ -32,15 +32,10 @@ class IDSRuleSet:
         return max(rule_lens)
 
 
-    def fraction_overlap(self):
-        pass
+    @staticmethod
+    def from_cba_rules(clazz, cba_rules):
+        ids_rules = list(map(IDSRule, cba_rules))
+        ids_ruleset = clazz(ids_rules)
+        
+        return ids_ruleset
 
-
-    def fraction_uncovered(self):
-        pass
-
-    def average_rule_length(self):
-        pass
-
-    def fraction_of_classes(self):
-        pass
