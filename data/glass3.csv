@@ -1,0 +1,193 @@
+Mg,Ca,Ba,Na,K,Al,Si,Fe,RI,Type
+2.695_to_inf,8.315_to_10.075,-inf_to_0.335,-inf_to_13.785,0.615_to_0.745,-inf_to_1.39,All,All,1.517335_to_1.517985,build wind float
+2.695_to_inf,8.315_to_10.075,-inf_to_0.335,-inf_to_13.785,0.055_to_0.615,-inf_to_1.39,All,All,1.51568_to_1.517335,vehic wind float
+2.695_to_inf,8.315_to_10.075,-inf_to_0.335,-inf_to_13.785,0.055_to_0.615,1.39_to_1.75,All,All,1.517335_to_1.517985,build wind float
+-inf_to_2.695,5.83_to_7.685,-inf_to_0.335,13.785_to_inf,-inf_to_0.055,1.39_to_1.75,All,All,-inf_to_1.51568,tableware
+-inf_to_2.695,10.075_to_inf,-inf_to_0.335,-inf_to_13.785,0.055_to_0.615,-inf_to_1.39,All,All,1.517985_to_inf,build wind non-float
+2.695_to_inf,8.315_to_10.075,-inf_to_0.335,-inf_to_13.785,0.055_to_0.615,1.39_to_1.75,All,All,1.51568_to_1.517335,build wind non-float
+2.695_to_inf,8.315_to_10.075,-inf_to_0.335,-inf_to_13.785,0.055_to_0.615,-inf_to_1.39,All,All,1.517335_to_1.517985,vehic wind float
+-inf_to_2.695,8.315_to_10.075,0.335_to_inf,13.785_to_inf,0.055_to_0.615,1.75_to_inf,All,All,-inf_to_1.51568,headlamps
+2.695_to_inf,8.315_to_10.075,-inf_to_0.335,-inf_to_13.785,0.055_to_0.615,-inf_to_1.39,All,All,1.517335_to_1.517985,build wind non-float
+2.695_to_inf,7.685_to_8.315,-inf_to_0.335,-inf_to_13.785,0.055_to_0.615,1.39_to_1.75,All,All,1.51568_to_1.517335,build wind non-float
+2.695_to_inf,8.315_to_10.075,-inf_to_0.335,-inf_to_13.785,0.615_to_0.745,-inf_to_1.39,All,All,1.517335_to_1.517985,build wind non-float
+2.695_to_inf,7.685_to_8.315,-inf_to_0.335,-inf_to_13.785,0.615_to_0.745,1.39_to_1.75,All,All,1.51568_to_1.517335,build wind non-float
+-inf_to_2.695,8.315_to_10.075,0.335_to_inf,13.785_to_inf,-inf_to_0.055,1.75_to_inf,All,All,1.51568_to_1.517335,headlamps
+2.695_to_inf,7.685_to_8.315,-inf_to_0.335,-inf_to_13.785,0.615_to_0.745,1.39_to_1.75,All,All,1.51568_to_1.517335,build wind non-float
+-inf_to_2.695,10.075_to_inf,-inf_to_0.335,-inf_to_13.785,0.055_to_0.615,1.75_to_inf,All,All,1.517985_to_inf,containers
+2.695_to_inf,8.315_to_10.075,-inf_to_0.335,-inf_to_13.785,0.055_to_0.615,1.39_to_1.75,All,All,1.517985_to_inf,build wind non-float
+2.695_to_inf,8.315_to_10.075,-inf_to_0.335,-inf_to_13.785,0.055_to_0.615,-inf_to_1.39,All,All,1.517985_to_inf,build wind float
+-inf_to_2.695,10.075_to_inf,-inf_to_0.335,-inf_to_13.785,0.745_to_inf,1.75_to_inf,All,All,1.517985_to_inf,build wind non-float
+2.695_to_inf,8.315_to_10.075,-inf_to_0.335,-inf_to_13.785,0.615_to_0.745,-inf_to_1.39,All,All,1.517985_to_inf,build wind non-float
+2.695_to_inf,7.685_to_8.315,-inf_to_0.335,-inf_to_13.785,0.055_to_0.615,-inf_to_1.39,All,All,1.517335_to_1.517985,build wind float
+-inf_to_2.695,8.315_to_10.075,-inf_to_0.335,-inf_to_13.785,0.745_to_inf,1.75_to_inf,All,All,1.517985_to_inf,containers
+2.695_to_inf,7.685_to_8.315,-inf_to_0.335,-inf_to_13.785,0.055_to_0.615,1.39_to_1.75,All,All,1.51568_to_1.517335,build wind non-float
+2.695_to_inf,7.685_to_8.315,-inf_to_0.335,-inf_to_13.785,0.615_to_0.745,1.75_to_inf,All,All,1.51568_to_1.517335,build wind non-float
+-inf_to_2.695,8.315_to_10.075,0.335_to_inf,13.785_to_inf,-inf_to_0.055,1.75_to_inf,All,All,1.51568_to_1.517335,headlamps
+2.695_to_inf,7.685_to_8.315,-inf_to_0.335,-inf_to_13.785,0.055_to_0.615,1.39_to_1.75,All,All,1.51568_to_1.517335,build wind non-float
+2.695_to_inf,8.315_to_10.075,-inf_to_0.335,-inf_to_13.785,0.055_to_0.615,-inf_to_1.39,All,All,1.51568_to_1.517335,vehic wind float
+2.695_to_inf,7.685_to_8.315,-inf_to_0.335,-inf_to_13.785,0.615_to_0.745,1.39_to_1.75,All,All,1.51568_to_1.517335,build wind non-float
+2.695_to_inf,8.315_to_10.075,-inf_to_0.335,-inf_to_13.785,0.055_to_0.615,1.39_to_1.75,All,All,1.517985_to_inf,vehic wind float
+-inf_to_2.695,5.83_to_7.685,-inf_to_0.335,13.785_to_inf,-inf_to_0.055,-inf_to_1.39,All,All,-inf_to_1.51568,tableware
+2.695_to_inf,7.685_to_8.315,-inf_to_0.335,-inf_to_13.785,0.615_to_0.745,1.39_to_1.75,All,All,1.51568_to_1.517335,build wind non-float
+2.695_to_inf,8.315_to_10.075,-inf_to_0.335,-inf_to_13.785,0.055_to_0.615,-inf_to_1.39,All,All,1.517335_to_1.517985,build wind float
+2.695_to_inf,7.685_to_8.315,-inf_to_0.335,-inf_to_13.785,0.615_to_0.745,1.39_to_1.75,All,All,1.51568_to_1.517335,build wind float
+2.695_to_inf,7.685_to_8.315,-inf_to_0.335,-inf_to_13.785,0.615_to_0.745,1.39_to_1.75,All,All,1.51568_to_1.517335,build wind float
+2.695_to_inf,8.315_to_10.075,-inf_to_0.335,-inf_to_13.785,0.615_to_0.745,1.39_to_1.75,All,All,1.51568_to_1.517335,build wind non-float
+2.695_to_inf,7.685_to_8.315,-inf_to_0.335,-inf_to_13.785,0.615_to_0.745,1.39_to_1.75,All,All,1.51568_to_1.517335,build wind non-float
+2.695_to_inf,8.315_to_10.075,-inf_to_0.335,-inf_to_13.785,0.615_to_0.745,-inf_to_1.39,All,All,1.517335_to_1.517985,build wind float
+2.695_to_inf,7.685_to_8.315,-inf_to_0.335,-inf_to_13.785,0.055_to_0.615,1.39_to_1.75,All,All,1.51568_to_1.517335,build wind non-float
+2.695_to_inf,7.685_to_8.315,-inf_to_0.335,-inf_to_13.785,0.055_to_0.615,1.39_to_1.75,All,All,1.51568_to_1.517335,build wind non-float
+2.695_to_inf,8.315_to_10.075,-inf_to_0.335,-inf_to_13.785,0.055_to_0.615,-inf_to_1.39,All,All,1.517985_to_inf,vehic wind float
+2.695_to_inf,8.315_to_10.075,-inf_to_0.335,-inf_to_13.785,0.055_to_0.615,-inf_to_1.39,All,All,1.517335_to_1.517985,build wind float
+-inf_to_2.695,5.83_to_7.685,0.335_to_inf,13.785_to_inf,0.745_to_inf,1.75_to_inf,All,All,-inf_to_1.51568,containers
+2.695_to_inf,8.315_to_10.075,-inf_to_0.335,-inf_to_13.785,0.055_to_0.615,-inf_to_1.39,All,All,1.517335_to_1.517985,build wind float
+2.695_to_inf,8.315_to_10.075,-inf_to_0.335,-inf_to_13.785,0.055_to_0.615,-inf_to_1.39,All,All,1.517985_to_inf,build wind non-float
+2.695_to_inf,8.315_to_10.075,-inf_to_0.335,-inf_to_13.785,0.055_to_0.615,-inf_to_1.39,All,All,1.517335_to_1.517985,build wind float
+2.695_to_inf,8.315_to_10.075,-inf_to_0.335,-inf_to_13.785,0.055_to_0.615,-inf_to_1.39,All,All,1.517985_to_inf,build wind non-float
+2.695_to_inf,7.685_to_8.315,-inf_to_0.335,-inf_to_13.785,0.055_to_0.615,-inf_to_1.39,All,All,1.517335_to_1.517985,build wind float
+2.695_to_inf,7.685_to_8.315,-inf_to_0.335,-inf_to_13.785,0.615_to_0.745,1.39_to_1.75,All,All,1.51568_to_1.517335,build wind non-float
+-inf_to_2.695,8.315_to_10.075,0.335_to_inf,13.785_to_inf,-inf_to_0.055,1.75_to_inf,All,All,1.51568_to_1.517335,headlamps
+2.695_to_inf,8.315_to_10.075,-inf_to_0.335,-inf_to_13.785,0.055_to_0.615,1.39_to_1.75,All,All,1.517335_to_1.517985,build wind float
+-inf_to_2.695,8.315_to_10.075,-inf_to_0.335,13.785_to_inf,0.745_to_inf,1.75_to_inf,All,All,1.517985_to_inf,headlamps
+2.695_to_inf,8.315_to_10.075,-inf_to_0.335,-inf_to_13.785,0.055_to_0.615,-inf_to_1.39,All,All,1.517985_to_inf,build wind float
+2.695_to_inf,8.315_to_10.075,-inf_to_0.335,-inf_to_13.785,0.055_to_0.615,-inf_to_1.39,All,All,1.517335_to_1.517985,vehic wind float
+2.695_to_inf,7.685_to_8.315,-inf_to_0.335,-inf_to_13.785,0.055_to_0.615,-inf_to_1.39,All,All,1.517985_to_inf,build wind non-float
+2.695_to_inf,8.315_to_10.075,-inf_to_0.335,-inf_to_13.785,0.055_to_0.615,-inf_to_1.39,All,All,1.517985_to_inf,build wind non-float
+2.695_to_inf,8.315_to_10.075,-inf_to_0.335,-inf_to_13.785,0.055_to_0.615,-inf_to_1.39,All,All,1.517985_to_inf,build wind float
+2.695_to_inf,8.315_to_10.075,-inf_to_0.335,-inf_to_13.785,0.055_to_0.615,-inf_to_1.39,All,All,-inf_to_1.51568,build wind float
+2.695_to_inf,8.315_to_10.075,-inf_to_0.335,13.785_to_inf,0.055_to_0.615,-inf_to_1.39,All,All,1.517985_to_inf,build wind float
+2.695_to_inf,8.315_to_10.075,-inf_to_0.335,-inf_to_13.785,0.055_to_0.615,-inf_to_1.39,All,All,1.517985_to_inf,build wind float
+-inf_to_2.695,8.315_to_10.075,0.335_to_inf,13.785_to_inf,0.055_to_0.615,1.75_to_inf,All,All,-inf_to_1.51568,headlamps
+2.695_to_inf,8.315_to_10.075,-inf_to_0.335,-inf_to_13.785,0.055_to_0.615,-inf_to_1.39,All,All,1.517985_to_inf,build wind float
+2.695_to_inf,8.315_to_10.075,-inf_to_0.335,13.785_to_inf,0.055_to_0.615,-inf_to_1.39,All,All,1.517985_to_inf,vehic wind float
+-inf_to_2.695,10.075_to_inf,0.335_to_inf,-inf_to_13.785,0.055_to_0.615,1.75_to_inf,All,All,1.517985_to_inf,build wind non-float
+2.695_to_inf,8.315_to_10.075,-inf_to_0.335,-inf_to_13.785,0.055_to_0.615,-inf_to_1.39,All,All,1.517985_to_inf,build wind float
+-inf_to_2.695,8.315_to_10.075,-inf_to_0.335,13.785_to_inf,-inf_to_0.055,1.39_to_1.75,All,All,1.517985_to_inf,tableware
+2.695_to_inf,7.685_to_8.315,-inf_to_0.335,-inf_to_13.785,0.055_to_0.615,1.39_to_1.75,All,All,1.517985_to_inf,build wind non-float
+2.695_to_inf,10.075_to_inf,-inf_to_0.335,-inf_to_13.785,0.055_to_0.615,-inf_to_1.39,All,All,1.517985_to_inf,build wind float
+2.695_to_inf,7.685_to_8.315,-inf_to_0.335,-inf_to_13.785,0.615_to_0.745,1.39_to_1.75,All,All,1.51568_to_1.517335,build wind non-float
+2.695_to_inf,8.315_to_10.075,-inf_to_0.335,-inf_to_13.785,0.055_to_0.615,1.39_to_1.75,All,All,1.517335_to_1.517985,build wind float
+2.695_to_inf,8.315_to_10.075,-inf_to_0.335,-inf_to_13.785,0.615_to_0.745,-inf_to_1.39,All,All,-inf_to_1.51568,build wind float
+2.695_to_inf,8.315_to_10.075,-inf_to_0.335,-inf_to_13.785,0.055_to_0.615,-inf_to_1.39,All,All,1.51568_to_1.517335,vehic wind float
+2.695_to_inf,8.315_to_10.075,-inf_to_0.335,-inf_to_13.785,0.055_to_0.615,-inf_to_1.39,All,All,1.51568_to_1.517335,build wind float
+2.695_to_inf,8.315_to_10.075,-inf_to_0.335,-inf_to_13.785,0.055_to_0.615,-inf_to_1.39,All,All,1.517335_to_1.517985,build wind float
+2.695_to_inf,7.685_to_8.315,-inf_to_0.335,-inf_to_13.785,0.055_to_0.615,-inf_to_1.39,All,All,1.517335_to_1.517985,build wind float
+2.695_to_inf,8.315_to_10.075,-inf_to_0.335,13.785_to_inf,-inf_to_0.055,-inf_to_1.39,All,All,1.517985_to_inf,vehic wind float
+2.695_to_inf,8.315_to_10.075,-inf_to_0.335,-inf_to_13.785,0.055_to_0.615,-inf_to_1.39,All,All,1.517335_to_1.517985,build wind float
+-inf_to_2.695,10.075_to_inf,-inf_to_0.335,-inf_to_13.785,0.055_to_0.615,1.39_to_1.75,All,All,1.517985_to_inf,containers
+2.695_to_inf,7.685_to_8.315,-inf_to_0.335,-inf_to_13.785,0.055_to_0.615,1.39_to_1.75,All,All,1.517985_to_inf,build wind non-float
+-inf_to_2.695,10.075_to_inf,-inf_to_0.335,-inf_to_13.785,0.055_to_0.615,-inf_to_1.39,All,All,1.517985_to_inf,build wind non-float
+2.695_to_inf,8.315_to_10.075,-inf_to_0.335,-inf_to_13.785,0.055_to_0.615,1.39_to_1.75,All,All,1.517335_to_1.517985,build wind float
+2.695_to_inf,8.315_to_10.075,-inf_to_0.335,-inf_to_13.785,0.615_to_0.745,-inf_to_1.39,All,All,1.517335_to_1.517985,build wind float
+2.695_to_inf,8.315_to_10.075,-inf_to_0.335,-inf_to_13.785,0.615_to_0.745,-inf_to_1.39,All,All,1.517335_to_1.517985,build wind float
+2.695_to_inf,8.315_to_10.075,-inf_to_0.335,-inf_to_13.785,0.055_to_0.615,-inf_to_1.39,All,All,1.517985_to_inf,build wind float
+-inf_to_2.695,8.315_to_10.075,-inf_to_0.335,13.785_to_inf,-inf_to_0.055,-inf_to_1.39,All,All,1.517985_to_inf,tableware
+-inf_to_2.695,8.315_to_10.075,0.335_to_inf,13.785_to_inf,-inf_to_0.055,1.75_to_inf,All,All,-inf_to_1.51568,headlamps
+2.695_to_inf,8.315_to_10.075,-inf_to_0.335,-inf_to_13.785,0.055_to_0.615,-inf_to_1.39,All,All,1.517985_to_inf,build wind float
+-inf_to_2.695,8.315_to_10.075,0.335_to_inf,13.785_to_inf,-inf_to_0.055,1.75_to_inf,All,All,1.51568_to_1.517335,headlamps
+-inf_to_2.695,10.075_to_inf,-inf_to_0.335,13.785_to_inf,0.055_to_0.615,1.39_to_1.75,All,All,1.517985_to_inf,build wind non-float
+2.695_to_inf,7.685_to_8.315,-inf_to_0.335,-inf_to_13.785,0.055_to_0.615,1.39_to_1.75,All,All,1.51568_to_1.517335,build wind non-float
+2.695_to_inf,8.315_to_10.075,-inf_to_0.335,-inf_to_13.785,0.055_to_0.615,-inf_to_1.39,All,All,1.517985_to_inf,build wind non-float
+2.695_to_inf,7.685_to_8.315,-inf_to_0.335,13.785_to_inf,0.055_to_0.615,-inf_to_1.39,All,All,1.517335_to_1.517985,build wind float
+2.695_to_inf,7.685_to_8.315,-inf_to_0.335,-inf_to_13.785,0.615_to_0.745,1.39_to_1.75,All,All,1.51568_to_1.517335,build wind non-float
+-inf_to_2.695,8.315_to_10.075,0.335_to_inf,13.785_to_inf,0.055_to_0.615,-inf_to_1.39,All,All,1.517985_to_inf,headlamps
+-inf_to_2.695,8.315_to_10.075,0.335_to_inf,13.785_to_inf,-inf_to_0.055,1.75_to_inf,All,All,1.51568_to_1.517335,headlamps
+-inf_to_2.695,7.685_to_8.315,0.335_to_inf,13.785_to_inf,-inf_to_0.055,1.75_to_inf,All,All,1.51568_to_1.517335,headlamps
+-inf_to_2.695,5.83_to_7.685,-inf_to_0.335,-inf_to_13.785,0.745_to_inf,1.75_to_inf,All,All,-inf_to_1.51568,containers
+2.695_to_inf,7.685_to_8.315,-inf_to_0.335,-inf_to_13.785,0.615_to_0.745,1.75_to_inf,All,All,1.51568_to_1.517335,build wind non-float
+-inf_to_2.695,8.315_to_10.075,0.335_to_inf,13.785_to_inf,-inf_to_0.055,1.75_to_inf,All,All,1.51568_to_1.517335,headlamps
+2.695_to_inf,8.315_to_10.075,-inf_to_0.335,-inf_to_13.785,0.055_to_0.615,-inf_to_1.39,All,All,1.517985_to_inf,build wind float
+-inf_to_2.695,10.075_to_inf,-inf_to_0.335,-inf_to_13.785,0.055_to_0.615,1.39_to_1.75,All,All,1.517985_to_inf,containers
+2.695_to_inf,8.315_to_10.075,-inf_to_0.335,-inf_to_13.785,0.055_to_0.615,-inf_to_1.39,All,All,1.517985_to_inf,build wind non-float
+-inf_to_2.695,8.315_to_10.075,0.335_to_inf,13.785_to_inf,-inf_to_0.055,1.75_to_inf,All,All,1.51568_to_1.517335,headlamps
+2.695_to_inf,8.315_to_10.075,-inf_to_0.335,13.785_to_inf,0.055_to_0.615,-inf_to_1.39,All,All,1.517985_to_inf,build wind float
+-inf_to_2.695,8.315_to_10.075,0.335_to_inf,13.785_to_inf,-inf_to_0.055,1.75_to_inf,All,All,1.51568_to_1.517335,headlamps
+2.695_to_inf,8.315_to_10.075,-inf_to_0.335,-inf_to_13.785,0.055_to_0.615,-inf_to_1.39,All,All,1.51568_to_1.517335,vehic wind float
+2.695_to_inf,8.315_to_10.075,-inf_to_0.335,-inf_to_13.785,0.055_to_0.615,-inf_to_1.39,All,All,1.517985_to_inf,headlamps
+-inf_to_2.695,8.315_to_10.075,-inf_to_0.335,-inf_to_13.785,0.055_to_0.615,1.39_to_1.75,All,All,1.517985_to_inf,build wind non-float
+2.695_to_inf,-inf_to_5.83,0.335_to_inf,13.785_to_inf,0.745_to_inf,1.75_to_inf,All,All,1.517985_to_inf,headlamps
+-inf_to_2.695,10.075_to_inf,-inf_to_0.335,-inf_to_13.785,-inf_to_0.055,-inf_to_1.39,All,All,1.517985_to_inf,build wind non-float
+2.695_to_inf,8.315_to_10.075,-inf_to_0.335,-inf_to_13.785,0.055_to_0.615,-inf_to_1.39,All,All,1.517335_to_1.517985,build wind float
+2.695_to_inf,8.315_to_10.075,-inf_to_0.335,-inf_to_13.785,0.055_to_0.615,-inf_to_1.39,All,All,1.51568_to_1.517335,build wind non-float
+2.695_to_inf,7.685_to_8.315,-inf_to_0.335,-inf_to_13.785,0.615_to_0.745,1.39_to_1.75,All,All,1.51568_to_1.517335,build wind float
+2.695_to_inf,10.075_to_inf,-inf_to_0.335,13.785_to_inf,0.055_to_0.615,-inf_to_1.39,All,All,1.517985_to_inf,build wind non-float
+-inf_to_2.695,10.075_to_inf,-inf_to_0.335,-inf_to_13.785,0.055_to_0.615,1.39_to_1.75,All,All,1.517985_to_inf,containers
+-inf_to_2.695,8.315_to_10.075,-inf_to_0.335,-inf_to_13.785,0.745_to_inf,-inf_to_1.39,All,All,1.51568_to_1.517335,headlamps
+-inf_to_2.695,8.315_to_10.075,0.335_to_inf,13.785_to_inf,0.055_to_0.615,1.75_to_inf,All,All,1.51568_to_1.517335,headlamps
+2.695_to_inf,8.315_to_10.075,-inf_to_0.335,-inf_to_13.785,0.055_to_0.615,-inf_to_1.39,All,All,1.517985_to_inf,build wind float
+2.695_to_inf,8.315_to_10.075,-inf_to_0.335,-inf_to_13.785,0.055_to_0.615,-inf_to_1.39,All,All,1.517335_to_1.517985,build wind float
+2.695_to_inf,7.685_to_8.315,-inf_to_0.335,-inf_to_13.785,0.615_to_0.745,1.39_to_1.75,All,All,1.51568_to_1.517335,build wind non-float
+2.695_to_inf,7.685_to_8.315,-inf_to_0.335,-inf_to_13.785,0.615_to_0.745,1.39_to_1.75,All,All,1.51568_to_1.517335,build wind non-float
+-inf_to_2.695,8.315_to_10.075,0.335_to_inf,13.785_to_inf,-inf_to_0.055,1.75_to_inf,All,All,1.517985_to_inf,headlamps
+2.695_to_inf,8.315_to_10.075,-inf_to_0.335,-inf_to_13.785,0.055_to_0.615,-inf_to_1.39,All,All,1.517335_to_1.517985,build wind float
+2.695_to_inf,7.685_to_8.315,-inf_to_0.335,-inf_to_13.785,0.055_to_0.615,-inf_to_1.39,All,All,1.517335_to_1.517985,build wind float
+2.695_to_inf,7.685_to_8.315,-inf_to_0.335,-inf_to_13.785,0.055_to_0.615,1.39_to_1.75,All,All,1.51568_to_1.517335,build wind non-float
+2.695_to_inf,8.315_to_10.075,-inf_to_0.335,-inf_to_13.785,0.055_to_0.615,-inf_to_1.39,All,All,1.517985_to_inf,build wind float
+2.695_to_inf,7.685_to_8.315,-inf_to_0.335,-inf_to_13.785,0.615_to_0.745,1.39_to_1.75,All,All,1.51568_to_1.517335,build wind non-float
+2.695_to_inf,8.315_to_10.075,-inf_to_0.335,-inf_to_13.785,0.055_to_0.615,-inf_to_1.39,All,All,1.517335_to_1.517985,build wind float
+2.695_to_inf,8.315_to_10.075,-inf_to_0.335,13.785_to_inf,0.055_to_0.615,-inf_to_1.39,All,All,1.517985_to_inf,build wind float
+2.695_to_inf,8.315_to_10.075,0.335_to_inf,13.785_to_inf,0.055_to_0.615,-inf_to_1.39,All,All,1.517985_to_inf,build wind float
+-inf_to_2.695,10.075_to_inf,-inf_to_0.335,-inf_to_13.785,0.745_to_inf,1.75_to_inf,All,All,1.51568_to_1.517335,containers
+2.695_to_inf,7.685_to_8.315,-inf_to_0.335,-inf_to_13.785,0.055_to_0.615,1.39_to_1.75,All,All,1.51568_to_1.517335,build wind non-float
+2.695_to_inf,8.315_to_10.075,-inf_to_0.335,-inf_to_13.785,0.055_to_0.615,1.39_to_1.75,All,All,1.517985_to_inf,build wind non-float
+2.695_to_inf,7.685_to_8.315,-inf_to_0.335,-inf_to_13.785,0.615_to_0.745,1.75_to_inf,All,All,1.51568_to_1.517335,build wind non-float
+-inf_to_2.695,8.315_to_10.075,-inf_to_0.335,-inf_to_13.785,0.055_to_0.615,1.39_to_1.75,All,All,1.517985_to_inf,build wind non-float
+2.695_to_inf,5.83_to_7.685,-inf_to_0.335,13.785_to_inf,0.055_to_0.615,1.39_to_1.75,All,All,1.51568_to_1.517335,build wind non-float
+2.695_to_inf,7.685_to_8.315,-inf_to_0.335,-inf_to_13.785,0.055_to_0.615,-inf_to_1.39,All,All,1.517985_to_inf,build wind non-float
+2.695_to_inf,-inf_to_5.83,0.335_to_inf,-inf_to_13.785,0.745_to_inf,1.75_to_inf,All,All,-inf_to_1.51568,headlamps
+-inf_to_2.695,10.075_to_inf,-inf_to_0.335,-inf_to_13.785,0.055_to_0.615,-inf_to_1.39,All,All,1.517985_to_inf,build wind non-float
+2.695_to_inf,7.685_to_8.315,-inf_to_0.335,-inf_to_13.785,0.055_to_0.615,-inf_to_1.39,All,All,1.517985_to_inf,build wind non-float
+2.695_to_inf,8.315_to_10.075,-inf_to_0.335,-inf_to_13.785,0.055_to_0.615,-inf_to_1.39,All,All,1.51568_to_1.517335,vehic wind float
+2.695_to_inf,8.315_to_10.075,-inf_to_0.335,-inf_to_13.785,0.615_to_0.745,-inf_to_1.39,All,All,1.517335_to_1.517985,build wind float
+-inf_to_2.695,8.315_to_10.075,0.335_to_inf,13.785_to_inf,-inf_to_0.055,1.75_to_inf,All,All,-inf_to_1.51568,headlamps
+-inf_to_2.695,10.075_to_inf,-inf_to_0.335,-inf_to_13.785,0.055_to_0.615,1.75_to_inf,All,All,1.517985_to_inf,containers
+2.695_to_inf,8.315_to_10.075,-inf_to_0.335,13.785_to_inf,-inf_to_0.055,-inf_to_1.39,All,All,1.517985_to_inf,build wind float
+2.695_to_inf,8.315_to_10.075,-inf_to_0.335,-inf_to_13.785,0.055_to_0.615,-inf_to_1.39,All,All,1.517985_to_inf,build wind non-float
+-inf_to_2.695,10.075_to_inf,-inf_to_0.335,-inf_to_13.785,-inf_to_0.055,-inf_to_1.39,All,All,1.517985_to_inf,build wind non-float
+2.695_to_inf,8.315_to_10.075,-inf_to_0.335,-inf_to_13.785,0.055_to_0.615,-inf_to_1.39,All,All,1.517985_to_inf,build wind float
+-inf_to_2.695,8.315_to_10.075,0.335_to_inf,13.785_to_inf,-inf_to_0.055,1.75_to_inf,All,All,1.51568_to_1.517335,headlamps
+-inf_to_2.695,5.83_to_7.685,-inf_to_0.335,-inf_to_13.785,0.745_to_inf,1.75_to_inf,All,All,-inf_to_1.51568,containers
+-inf_to_2.695,10.075_to_inf,-inf_to_0.335,-inf_to_13.785,-inf_to_0.055,-inf_to_1.39,All,All,1.517985_to_inf,build wind non-float
+2.695_to_inf,8.315_to_10.075,-inf_to_0.335,-inf_to_13.785,0.055_to_0.615,-inf_to_1.39,All,All,1.517335_to_1.517985,build wind float
+2.695_to_inf,8.315_to_10.075,-inf_to_0.335,-inf_to_13.785,0.615_to_0.745,-inf_to_1.39,All,All,1.517985_to_inf,build wind non-float
+2.695_to_inf,7.685_to_8.315,-inf_to_0.335,-inf_to_13.785,0.615_to_0.745,-inf_to_1.39,All,All,1.51568_to_1.517335,build wind non-float
+-inf_to_2.695,8.315_to_10.075,0.335_to_inf,13.785_to_inf,-inf_to_0.055,1.75_to_inf,All,All,1.51568_to_1.517335,headlamps
+2.695_to_inf,8.315_to_10.075,-inf_to_0.335,-inf_to_13.785,0.055_to_0.615,-inf_to_1.39,All,All,1.51568_to_1.517335,build wind non-float
+2.695_to_inf,8.315_to_10.075,-inf_to_0.335,-inf_to_13.785,0.055_to_0.615,1.39_to_1.75,All,All,1.51568_to_1.517335,build wind non-float
+2.695_to_inf,8.315_to_10.075,-inf_to_0.335,13.785_to_inf,-inf_to_0.055,-inf_to_1.39,All,All,1.517985_to_inf,build wind float
+2.695_to_inf,7.685_to_8.315,-inf_to_0.335,13.785_to_inf,0.055_to_0.615,-inf_to_1.39,All,All,1.517985_to_inf,build wind float
+-inf_to_2.695,8.315_to_10.075,0.335_to_inf,13.785_to_inf,-inf_to_0.055,1.75_to_inf,All,All,1.51568_to_1.517335,headlamps
+2.695_to_inf,8.315_to_10.075,-inf_to_0.335,13.785_to_inf,0.055_to_0.615,-inf_to_1.39,All,All,1.517985_to_inf,build wind float
+2.695_to_inf,8.315_to_10.075,-inf_to_0.335,-inf_to_13.785,0.055_to_0.615,-inf_to_1.39,All,All,1.517985_to_inf,build wind float
+-inf_to_2.695,10.075_to_inf,-inf_to_0.335,-inf_to_13.785,0.055_to_0.615,1.39_to_1.75,All,All,1.517985_to_inf,containers
+-inf_to_2.695,10.075_to_inf,-inf_to_0.335,13.785_to_inf,-inf_to_0.055,-inf_to_1.39,All,All,1.517985_to_inf,tableware
+2.695_to_inf,7.685_to_8.315,-inf_to_0.335,-inf_to_13.785,0.615_to_0.745,1.39_to_1.75,All,All,1.51568_to_1.517335,build wind non-float
+2.695_to_inf,8.315_to_10.075,-inf_to_0.335,-inf_to_13.785,0.055_to_0.615,1.39_to_1.75,All,All,1.517335_to_1.517985,vehic wind float
+-inf_to_2.695,10.075_to_inf,-inf_to_0.335,13.785_to_inf,0.055_to_0.615,-inf_to_1.39,All,All,1.517985_to_inf,build wind non-float
+2.695_to_inf,8.315_to_10.075,-inf_to_0.335,-inf_to_13.785,0.055_to_0.615,-inf_to_1.39,All,All,1.517335_to_1.517985,build wind float
+2.695_to_inf,8.315_to_10.075,-inf_to_0.335,-inf_to_13.785,0.055_to_0.615,-inf_to_1.39,All,All,1.517335_to_1.517985,build wind float
+2.695_to_inf,8.315_to_10.075,-inf_to_0.335,-inf_to_13.785,0.055_to_0.615,-inf_to_1.39,All,All,1.517985_to_inf,build wind float
+2.695_to_inf,8.315_to_10.075,-inf_to_0.335,-inf_to_13.785,0.055_to_0.615,-inf_to_1.39,All,All,1.51568_to_1.517335,vehic wind float
+-inf_to_2.695,10.075_to_inf,-inf_to_0.335,-inf_to_13.785,0.055_to_0.615,1.39_to_1.75,All,All,1.517985_to_inf,containers
+2.695_to_inf,8.315_to_10.075,-inf_to_0.335,-inf_to_13.785,0.055_to_0.615,-inf_to_1.39,All,All,1.517985_to_inf,build wind float
+2.695_to_inf,8.315_to_10.075,-inf_to_0.335,-inf_to_13.785,0.055_to_0.615,-inf_to_1.39,All,All,1.517335_to_1.517985,build wind float
+-inf_to_2.695,8.315_to_10.075,-inf_to_0.335,13.785_to_inf,-inf_to_0.055,1.39_to_1.75,All,All,1.517985_to_inf,tableware
+-inf_to_2.695,8.315_to_10.075,0.335_to_inf,13.785_to_inf,-inf_to_0.055,1.75_to_inf,All,All,-inf_to_1.51568,headlamps
+-inf_to_2.695,10.075_to_inf,-inf_to_0.335,13.785_to_inf,-inf_to_0.055,1.75_to_inf,All,All,1.517985_to_inf,tableware
+2.695_to_inf,8.315_to_10.075,-inf_to_0.335,-inf_to_13.785,0.615_to_0.745,-inf_to_1.39,All,All,1.517985_to_inf,build wind non-float
+2.695_to_inf,7.685_to_8.315,-inf_to_0.335,-inf_to_13.785,0.615_to_0.745,1.39_to_1.75,All,All,1.51568_to_1.517335,build wind non-float
+2.695_to_inf,7.685_to_8.315,-inf_to_0.335,-inf_to_13.785,0.055_to_0.615,1.39_to_1.75,All,All,1.51568_to_1.517335,build wind non-float
+2.695_to_inf,7.685_to_8.315,-inf_to_0.335,-inf_to_13.785,0.615_to_0.745,1.75_to_inf,All,All,1.51568_to_1.517335,build wind non-float
+2.695_to_inf,7.685_to_8.315,-inf_to_0.335,-inf_to_13.785,0.615_to_0.745,1.39_to_1.75,All,All,1.51568_to_1.517335,build wind non-float
+2.695_to_inf,8.315_to_10.075,-inf_to_0.335,-inf_to_13.785,0.055_to_0.615,-inf_to_1.39,All,All,1.517985_to_inf,build wind float
+2.695_to_inf,8.315_to_10.075,-inf_to_0.335,-inf_to_13.785,0.055_to_0.615,1.39_to_1.75,All,All,1.517335_to_1.517985,vehic wind float
+2.695_to_inf,8.315_to_10.075,-inf_to_0.335,-inf_to_13.785,0.055_to_0.615,-inf_to_1.39,All,All,1.517335_to_1.517985,build wind float
+2.695_to_inf,8.315_to_10.075,-inf_to_0.335,-inf_to_13.785,0.055_to_0.615,1.39_to_1.75,All,All,1.517985_to_inf,build wind non-float
+2.695_to_inf,8.315_to_10.075,-inf_to_0.335,-inf_to_13.785,0.055_to_0.615,-inf_to_1.39,All,All,1.51568_to_1.517335,build wind float
+-inf_to_2.695,8.315_to_10.075,0.335_to_inf,13.785_to_inf,-inf_to_0.055,1.75_to_inf,All,All,1.51568_to_1.517335,headlamps
+2.695_to_inf,7.685_to_8.315,-inf_to_0.335,-inf_to_13.785,0.055_to_0.615,1.39_to_1.75,All,All,1.51568_to_1.517335,build wind float
+2.695_to_inf,8.315_to_10.075,-inf_to_0.335,-inf_to_13.785,0.055_to_0.615,-inf_to_1.39,All,All,1.517335_to_1.517985,build wind float
+2.695_to_inf,8.315_to_10.075,-inf_to_0.335,-inf_to_13.785,0.055_to_0.615,-inf_to_1.39,All,All,1.51568_to_1.517335,vehic wind float
+2.695_to_inf,7.685_to_8.315,-inf_to_0.335,-inf_to_13.785,0.615_to_0.745,1.75_to_inf,All,All,1.51568_to_1.517335,build wind non-float
+2.695_to_inf,8.315_to_10.075,-inf_to_0.335,-inf_to_13.785,0.615_to_0.745,1.39_to_1.75,All,All,1.51568_to_1.517335,build wind non-float
+-inf_to_2.695,8.315_to_10.075,-inf_to_0.335,13.785_to_inf,-inf_to_0.055,1.39_to_1.75,All,All,1.517985_to_inf,tableware

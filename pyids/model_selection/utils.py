@@ -1,4 +1,11 @@
 import numpy as np
+import pandas as pd
+import random
+
+from pyarc.algorithms import top_rules, createCARs
+from pyarc.data_structures import TransactionDB
+from ..ids_rule import IDSRule
+from ..ids_ruleset import IDSRuleSet
 
 def encode_label(actual, predicted):
     levels = set(actual)
@@ -21,3 +28,14 @@ def mode(array):
     idx = np.argmax(counts)
     
     return values[idx] 
+
+def train_test_split_pd(dataframe, prop=0.25):
+    n = len(dataframe)
+    samp = list(range(n))
+    test_n = int(prop * n)
+    train_n = n - test_n
+    
+    test_ind = random.sample(samp, test_n)
+    train_ind = list(set(samp).difference(set(test_ind)))
+
+    return dataframe.iloc[train_ind, :].reset_index(drop=True), dataframe.iloc[test_ind, :].reset_index(drop=True)

@@ -14,6 +14,7 @@ from .model_selection import mode
 import scipy
 
 import numpy as np
+import random
 
 class IDSClassifier:
     
@@ -212,7 +213,7 @@ class IDS:
 
 class IDSOneVsAll:
 
-    def __init__(self, quant_dataframe, class_name=None):
+    def _prepare(self, quant_dataframe, class_name):
         if type(quant_dataframe) != QuantitativeDataFrame:
             raise Exception("Type of quant_dataframe must be QuantitativeDataFrame")
 
@@ -248,10 +249,12 @@ class IDSOneVsAll:
             )})
 
 
-    def fit(self, rule_cutoff=30):
+    def fit(self, quant_dataframe, cars=None, rule_cutoff=30, class_name=None, debug=False):
+
+        self._prepare(quant_dataframe, class_name)
 
         for class_, clf_dict in self.ids_classifiers.items():
-            print(class_, "training class:")
+            print("training class:", class_)
 
             clf = clf_dict["clf"]
             quant_dataframe = clf_dict["quant_dataframe"]
@@ -262,7 +265,7 @@ class IDSOneVsAll:
             cars = createCARs(rules)
             cars.sort(reverse=True)
 
-            clf.fit(quant_dataframe, cars[:rule_cutoff])
+            clf.fit(quant_dataframe, cars[:rule_cutoff], debug=debug)
 
 
     def _prepare_data_sample(self, quant_dataframe):
@@ -301,7 +304,7 @@ class IDSOneVsAll:
         restricted_quant_dataframes = self._prepare_data_sample(quant_dataframe)
 
         for idx, (class_, clf_dict) in enumerate(self.ids_classifiers.items()):
-            print(class_, "scoring class:")
+            print("scoring class:", class_)
 
             clf = clf_dict["clf"]
 
@@ -315,3 +318,25 @@ class IDSOneVsAll:
         auc_mean = np.mean(AUCs)
 
         return auc_mean
+
+
+
+def mine_CARs(df, rule_cutoff, sample=False):
+    txns = TransactionDB.from_DataFrame(df)
+    rules = top_rules(txns.string_representation, appearance=txns.appeardict)
+    cars = createCARs(rules)
+
+    cars_subset = cars[:rule_cutoff]
+
+    if sample:
+        cars_subset = random.sample(cars, rule_cutoff)
+
+    return cars_subset
+
+
+def mine_IDS_ruleset(df, rule_cutoff):
+    cars_subset = mine_CARs(rule_cutoff)
+    ids_rls_subset = map(IDSRule, cars_subset)
+    ids_ruleset = IDSRuleSet(ids_rls_subset)
+
+    return ids_ruleset

@@ -21,25 +21,16 @@ from pyids.model_selection import encode_label, mode, CoordinateAscentOptimizer
 
 
 df = pd.read_csv("./data/iris0.csv")
+df_test = pd.read_csv("./data/iris1.csv")
 Y = df.iloc[:,-1]
 
-"""
-txns = TransactionDB.from_DataFrame(df)
-rules = top_rules(txns.string_representation, appearance=txns.appeardict)
-cars = createCARs(rules)
-cars.sort(reverse=True)
-
-
-ids_rules = map(IDSRule, cars[:20])
-ids_ruleset = IDSRuleSet(ids_rules)
-"""
 quant_dataframe = QuantitativeDataFrame(df)
+quant_dataframe_test = QuantitativeDataFrame(df_test)
 
 
+ids = IDSOneVsAll()
+ids.fit(quant_dataframe)
 
-ids = IDSOneVsAll(quant_dataframe)
-ids.fit()
 
-
-print(ids.score_auc(quant_dataframe))
+print(ids.score_auc(quant_dataframe_test))
 
