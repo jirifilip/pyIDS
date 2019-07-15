@@ -20,6 +20,6 @@ from pyids.model_selection import encode_label, mode, KFoldCV
 dataframes = [ pd.read_csv("./data/iris{}.csv".format(i)) for i in range(10)]
 
 kfold = KFoldCV(IDSOneVsAll(), dataframes, score_auc=True)
-scores = kfold.fit(50)
+scores = kfold.fit(rule_cutoff=50)
 
 print(scores)

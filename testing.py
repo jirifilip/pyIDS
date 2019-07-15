@@ -34,49 +34,6 @@ cars = createCARs(rules)
 
 quant_df = QuantitativeDataFrame(df)
 
-"""
-car1 = cars[0]
-car2 = cars[10]
-
-ids_rules = list(map(IDSRule, cars))
-
-ids_rule1 = IDSRule(car1)
-ids_rule2 = IDSRule(car2)
-
-
-params = ObjectiveFunctionParameters()
-all_rules = IDSRuleSet(ids_rules[:80])
-params.params["all_rules"] = all_rules
-params.params["quant_dataframe"] = quant_df
-objective_function = IDSObjectiveFunction(objective_func_params=params)
-
-
-solution_set = IDSRuleSet([ids_rule1, ids_rule2])
-
-
-
-
-opt = SLSOptimizer(objective_function, params)
-
-#opt.optimize()
-
-rs_opt = RSOptimizer(all_rules.ruleset)
-
-soln_set = IDSRuleSet(rs_opt.optimize())
-
-
-print(objective_function.evaluate(soln_set))
-
-sampled = opt.sample_random_set(soln_set.ruleset, 0.33)
-
-objective_function.evaluate(IDSRuleSet(sampled))
-
-soln_set = opt.optimize()
-
-
-print(soln_set)
-"""
-
 ids = IDS()
 ids.fit(quant_df, cars[:40])
 

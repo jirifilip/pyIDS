@@ -249,7 +249,7 @@ class IDSOneVsAll:
             )})
 
 
-    def fit(self, quant_dataframe, cars=None, rule_cutoff=30, class_name=None, debug=False):
+    def fit(self, quant_dataframe, cars=None, rule_cutoff=30, lambda_array=7*[1], class_name=None, debug=False):
 
         self._prepare(quant_dataframe, class_name)
 
@@ -265,7 +265,7 @@ class IDSOneVsAll:
             cars = createCARs(rules)
             cars.sort(reverse=True)
 
-            clf.fit(quant_dataframe, cars[:rule_cutoff], debug=debug)
+            clf.fit(quant_dataframe, cars[:rule_cutoff], lambda_array=lambda_array, debug=debug)
 
 
     def _prepare_data_sample(self, quant_dataframe):
@@ -335,7 +335,7 @@ def mine_CARs(df, rule_cutoff, sample=False):
 
 
 def mine_IDS_ruleset(df, rule_cutoff):
-    cars_subset = mine_CARs(rule_cutoff)
+    cars_subset = mine_CARs(df, rule_cutoff)
     ids_rls_subset = map(IDSRule, cars_subset)
     ids_ruleset = IDSRuleSet(ids_rls_subset)
 
