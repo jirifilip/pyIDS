@@ -5,7 +5,7 @@ from pyarc.algorithms import top_rules, createCARs
 from .ids_rule import IDSRule
 from .ids_ruleset import IDSRuleSet
 from .ids_objective_function import IDSObjectiveFunction, ObjectiveFunctionParameters
-from .ids_optimizer import SLSOptimizer
+from .ids_optimizer import SLSOptimizer, DLSOptimizer
 
 from .model_selection import encode_label
 
@@ -20,6 +20,7 @@ class IDSClassifier:
     
     def __init__(self, rules):
         self.rules = rules
+        
 
 
     def get_prediction_rules(self, quant_dataframe):
@@ -50,6 +51,8 @@ class IDSClassifier:
 
         minority_classes = []
 
+        rule_list = list(self.rules)
+
         if y_pred_dict:
             for i in range(len(Y)):
                 all_NA = np.all(y_pred_array[:,i] == IDSRule.DUMMY_LABEL)
@@ -69,11 +72,10 @@ class IDSClassifier:
                 non_na_mask = y_pred_array_datacase != IDSRule.DUMMY_LABEL
                 
                 y_pred_array_datacase_non_na = np.where(non_na_mask)[0]
-                print(y_pred_array_datacase_non_na)
                 
                 if len(y_pred_array_datacase_non_na) > 0:
                     rule_index = y_pred_array_datacase_non_na[0]
-                    rule = self.rules[rule_index]
+                    rule = rule_list[rule_index]
 
                     y_pred.append((rule.car.confidence, rule.car.consequent.value))
                 else:
@@ -152,9 +154,13 @@ class IDS:
         self.clf = None
         self.cacher = None
         self.ids_ruleset = None
+        self.algorithms = dict(
+            SLS=SLSOptimizer,
+            DLS=DLSOptimizer
+        )
     
 
-    def fit(self, quant_dataframe, class_association_rules = None, lambda_array=7*[1], debug=True, objective_scale_factor=1):
+    def fit(self, quant_dataframe, class_association_rules = None, lambda_array=7*[1], algorithm="SLS", debug=True, objective_scale_factor=1):
         if type(quant_dataframe) != QuantitativeDataFrame:
             raise Exception("Type of quant_dataframe must be QuantitativeDataFrame")
 
@@ -179,7 +185,7 @@ class IDS:
         # objective function
         objective_function = IDSObjectiveFunction(objective_func_params=params, cacher=self.cacher, scale_factor=objective_scale_factor)
 
-        optimizer = SLSOptimizer(objective_function, params, debug=debug)
+        optimizer = self.algorithms[algorithm](objective_function, params, debug=debug)
 
         solution_set = optimizer.optimize()
 
@@ -201,14 +207,50 @@ class IDS:
 
         return metric(pred, actual)
 
+    def _calculate_auc_for_ruleconf(self, quant_dataframe):
+        conf_pred = self.clf.get_prediction_rules(quant_dataframe)
 
-    def score_auc(self, quant_dataframe):
+        confidences = []
+        predicted_classes = []
+
+        for conf, predicted_class in conf_pred:
+            confidences.append(conf)
+            predicted_classes.append(predicted_class)
+
+        actual_classes = quant_dataframe.dataframe.iloc[:, -1].values
+
+        actual, pred = encode_label(actual_classes, predicted_classes)
+
+        corrected_confidences = []
+
+        for conf, predicted_class_label in zip(confidences, pred):
+            if predicted_class_label == None:
+                corrected_confidences.append(1)
+
+            if predicted_class_label == 0:
+                corrected_confidences.append(1 - conf)
+            elif predicted_class_label == 1:
+                corrected_confidences.append(conf)
+            else:
+                raise Exception("Use One-vs-all IDS classifier for calculating AUC for multiclass problems")
+
+        return roc_auc_score(actual, corrected_confidences)
+
+
+    def _calcutate_auc_classical(self, quant_dataframe):
         pred = self.predict(quant_dataframe)
         actual = quant_dataframe.dataframe.iloc[:,-1].values
 
         actual, pred = encode_label(actual, pred)
 
         return roc_auc_score(actual, pred)
+
+
+    def score_auc(self, quant_dataframe, confidence_based=False):
+        if confidence_based:
+            return self._calculate_auc_for_ruleconf(quant_dataframe)
+        else:
+            return self._calcutate_auc_classical(quant_dataframe)
 
 
 class IDSOneVsAll:
@@ -249,7 +291,7 @@ class IDSOneVsAll:
             )})
 
 
-    def fit(self, quant_dataframe, cars=None, rule_cutoff=30, lambda_array=7*[1], class_name=None, debug=False):
+    def fit(self, quant_dataframe, cars=None, rule_cutoff=30, lambda_array=7*[1], class_name=None, debug=False, algorithm="SLS"):
 
         self._prepare(quant_dataframe, class_name)
 
@@ -265,12 +307,11 @@ class IDSOneVsAll:
             cars = createCARs(rules)
             cars.sort(reverse=True)
 
-            clf.fit(quant_dataframe, cars[:rule_cutoff], lambda_array=lambda_array, debug=debug)
+            clf.fit(quant_dataframe, cars[:rule_cutoff], lambda_array=lambda_array, debug=debug, algorithm=algorithm)
 
 
     def _prepare_data_sample(self, quant_dataframe):
         pandas_dataframe = quant_dataframe.dataframe
-        ids_classifiers = dict()
 
         class_column = pandas_dataframe[self.class_name] if self.class_name else pandas_dataframe.iloc[:,-1]
         unique_classes = np.unique(class_column.values)

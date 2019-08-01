@@ -25,7 +25,7 @@ from pyarc.algorithms import createCARs, top_rules
 from pyarc import TransactionDB
 
 
-df = pd.read_csv("C:/code/python/interpretable_decision_sets/data/iris0.csv")
+df = pd.read_csv("C:/code/python/interpretable_decision_sets/data/titanic.csv")
 Y = df.iloc[:,-1]
 txns = TransactionDB.from_DataFrame(df)
 rules = top_rules(txns.string_representation, appearance=txns.appeardict)
@@ -35,8 +35,8 @@ cars = createCARs(rules)
 quant_df = QuantitativeDataFrame(df)
 
 ids = IDS()
-ids.fit(quant_df, cars[:40])
+ids.fit(quant_df, cars[:40], algorithm="SLS")
 
-acc = ids.score(quant_df, metric=accuracy_score)
+acc = ids.score_auc(quant_df)
 
 print(acc)

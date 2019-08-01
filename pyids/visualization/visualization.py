@@ -37,5 +37,4 @@ class IDSVisualization:
             color = self.pd_dataframe[self.colnames_y].values
             
             ax.scatter(x, y, c=color)
-            ax.set_xlabel()
 
