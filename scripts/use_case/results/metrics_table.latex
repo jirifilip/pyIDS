@@ -1,0 +1,11 @@
+\begin{tabular}{lrrr}
+\toprule
+{} &     ascent &      basic &     random \\
+\midrule
+average\_rule\_width &   2.071429 &   2.166667 &   2.058824 \\
+fraction\_classes   &   1.000000 &   1.000000 &   1.000000 \\
+fraction\_overlap   &   0.022378 &   0.016908 &   0.030582 \\
+fraction\_uncovered &   0.031818 &   0.006818 &   0.000000 \\
+ruleset\_length     &  14.000000 &  12.000000 &  17.000000 \\
+\bottomrule
+\end{tabular}

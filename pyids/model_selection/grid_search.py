@@ -95,12 +95,3 @@ class GridSearchOptimizer(ParameterSpaceOptimizer):
         self.best_params = self.score_params_dict[maximum_score]
         
         return self.best_params
-                
-        
-
-
-
-    
-
-                
-

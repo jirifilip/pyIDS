@@ -165,6 +165,10 @@ class CoordinateAscentOptimizer:
 
             current_delta_between_iterations = np.abs(current_best_params_previous_iteration - self.current_best_params)
             current_best_params_previous_iteration = self.current_best_params
+
+
+
+        return self.current_best_params
         
 
 

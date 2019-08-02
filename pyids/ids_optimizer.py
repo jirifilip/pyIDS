@@ -119,7 +119,7 @@ class SLSOptimizer:
 
             for rule_idx, rule in enumerate(soln_set.ruleset):
                 if omega_estimates[rule_idx] < -2.0/(n*n) * OPT:
-                    soln_set.ruleset.remove(rule_ind)
+                    soln_set.ruleset.remove(rule_idx)
                     restart_omega_computations = True
 
                     if self.debug:

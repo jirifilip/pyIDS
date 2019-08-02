@@ -97,11 +97,3 @@ class RandomSearchOptimizer(ParameterSpaceOptimizer):
         
         return self.best_params
                 
-        
-
-
-
-    
-
-                
-
