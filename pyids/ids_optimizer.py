@@ -98,7 +98,8 @@ class SLSOptimizer:
                 if self.debug:
                     print("Estimating omega for rule", rule, sep="\n")
                 
-                omega_est = self.estimate_omega(rule, soln_set, 1.0/(n*n) * OPT, delta)
+                omega_est = self.estimate_omega(rule, soln_set, 0.5*1/(n*n) * OPT, delta)
+                #omega_est = self.estimate_omega(rule, soln_set, 1/(n*n) * OPT, delta)
                 omega_estimates.append(omega_est)
 
                 if rule in soln_set.ruleset:
