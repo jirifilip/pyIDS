@@ -1,5 +1,7 @@
 from .ids_rule import IDSRule
 
+import xml.etree.ElementTree as ET
+
 class IDSRuleSet:
 
     def __init__(self, rules=None):
@@ -38,4 +40,30 @@ class IDSRuleSet:
         ids_ruleset = clazz(ids_rules)
         
         return ids_ruleset
+
+
+    def to_dict(self):
+        rule_dict_list = []
+
+        for rule in self.ruleset:
+            rule_dict_list.append(rule.to_dict())
+
+        return rule_dict_list
+
+
+    def to_xml(self, return_ET=True):
+        rule_xml_list = ET.Element("rules")
+
+        for rule in self.ruleset:
+            rule_xml = rule.to_xml()
+
+            rule_xml_list.append(rule_xml)
+
+        if return_ET:
+            return ET.ElementTree(rule_xml_list)
+        else:
+            return ET.dump(rule_xml_list)
+
+
+
 

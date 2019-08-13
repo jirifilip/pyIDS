@@ -7,7 +7,7 @@ from .ids_ruleset import IDSRuleSet
 from .ids_objective_function import IDSObjectiveFunction, ObjectiveFunctionParameters
 from .ids_optimizer import SLSOptimizer, DLSOptimizer
 
-from .model_selection import encode_label
+from .model_selection import encode_label, calculate_ruleset_statistics
 
 from sklearn.metrics import f1_score, accuracy_score, roc_auc_score
 from .model_selection import mode
@@ -251,6 +251,14 @@ class IDS:
             return self._calculate_auc_for_ruleconf(quant_dataframe)
         else:
             return self._calcutate_auc_classical(quant_dataframe)
+
+
+    def score_interpretable_metrics(self, quant_dataframe):
+        current_ruleset = IDSRuleSet(self.clf.rules)
+        
+        stats = calculate_ruleset_statistics(current_ruleset, quant_dataframe)
+
+        return stats
 
 
 class IDSOneVsAll:

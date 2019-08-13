@@ -1,6 +1,7 @@
 from pyarc.qcba.data_structures import QuantitativeDataFrame
 
 import numpy as np
+import xml.etree.ElementTree as ET
 
 
 class IDSRule:
@@ -25,7 +26,38 @@ class IDSRule:
 
     def __hash__(self):
         return hash(self.car)
-    
+
+    def to_dict(self):
+        rule_dict = dict(antecedent=[], consequent={})
+
+        for label, value in self.car.antecedent:
+            rule_dict["antecedent"].append(dict(name=label, value=value))
+
+        label, value = self.car.consequent
+
+        rule_dict["consequent"].update(dict(name=label, value=value))
+
+        return rule_dict
+
+    def to_xml(self):
+        rule_dict = self.to_dict()
+
+        rule = ET.Element("Rule")
+        antecedent = ET.SubElement(rule, "Antecedent")
+
+        for antecedent_member in rule_dict["antecedent"]:
+            for label, value in antecedent_member.items():
+                label_element = ET.SubElement(antecedent, label)
+                label_element.text = value
+
+        consequent = ET.SubElement(rule, "Consequent")
+
+        for label, value in rule_dict["consequent"].items():
+            label_element = ET.SubElement(consequent, label)
+            label_element.text = value
+
+        return rule 
+
 
     def calculate_cover(self, quant_dataframe):
         if type(quant_dataframe) != QuantitativeDataFrame:
