@@ -34,7 +34,7 @@ class IDSRuleSet:
         return max(rule_lens)
 
 
-    @staticmethod
+    @classmethod
     def from_cba_rules(clazz, cba_rules):
         ids_rules = list(map(IDSRule, cba_rules))
         ids_ruleset = clazz(ids_rules)

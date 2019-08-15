@@ -3,14 +3,17 @@ import pandas as pd
 from pyarc.qcba.data_structures import QuantitativeDataFrame
 
 from pyids.ids_classifier import IDS, mine_IDS_ruleset
+from pyids.ids_ruleset import IDSRuleSet
 from pyids.model_selection import RandomSearchOptimizer, train_test_split_pd
+from pyids.rule_mining import RuleMiner
 
 
 df = pd.read_csv("../../data/titanic.csv")
 
+rm = RuleMiner()
+cars = rm.mine_rules(df, minsup=0.001)
 
-
-ids_ruleset = mine_IDS_ruleset(df, rule_cutoff=40)
+ids_ruleset = IDSRuleSet.from_cba_rules(cars)
 
 df_train, df_test = train_test_split_pd(df, prop=0.25)
 quant_df_train, quant_df_test = QuantitativeDataFrame(df_train), QuantitativeDataFrame(df_test)

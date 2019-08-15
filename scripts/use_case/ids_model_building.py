@@ -33,6 +33,11 @@ ascent_metrics = calculate_ruleset_statistics(IDSRuleSet(ids_ascent.clf.rules), 
 random_metrics = calculate_ruleset_statistics(IDSRuleSet(ids_random.clf.rules), quant_df_test)
 basic_metrics = calculate_ruleset_statistics(IDSRuleSet(ids_basic.clf.rules), quant_df_test)
 
+ascent_metrics.update({"auc": ids_ascent.score_auc(quant_df_test)})
+random_metrics.update({"auc": ids_random.score_auc(quant_df_test)})
+basic_metrics.update({"auc": ids_basic.score_auc(quant_df_test)})
+
+
 metrics_dict = dict(
     ascent=ascent_metrics,
     random=random_metrics,

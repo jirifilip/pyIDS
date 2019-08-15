@@ -45,9 +45,10 @@ class RuleMiner:
 
         distinct_classes = list(pandas_df.iloc[:,-1].unique())
 
-        fim_rules = self._convert_to_fim_rules(frequent_itemsets, distinct_classes)
+        fim_rules = self._convert_to_fim_rules(frequent_itemsets, distinct_classes, pandas_df.columns[-1])
 
         cars = createCARs(fim_rules)
+        print(cars)
 
         for car in cars:
             car.confidence = self._calculate_rule_confidence(car, pandas_df)
