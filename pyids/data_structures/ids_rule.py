@@ -39,6 +39,36 @@ class IDSRule:
 
         return rule_dict
 
+    def to_ruleml_xml(self):
+        rule_dict = self.to_dict()
+
+        rule = ET.Element("Implies")
+
+        consequent = ET.SubElement(rule, "head")
+
+        label_element = ET.SubElement(consequent, "Atom")
+        var_element = ET.SubElement(label_element, "Var")
+        var_element.text = rule_dict["consequent"]["name"]
+
+        rel_element = ET.SubElement(label_element, "Rel")
+        rel_element.text = rule_dict["consequent"]["value"]
+
+
+        antecedent = ET.SubElement(rule, "body")
+
+        for antecedent_member in rule_dict["antecedent"]:
+            for label, value in antecedent_member.items():
+                label_element = ET.SubElement(antecedent, "Atom")
+                var_element = ET.SubElement(label_element, "Var")
+                var_element.text = label
+
+                rel_element = ET.SubElement(label_element, "Rel")
+                rel_element.text = value
+
+        return rule
+
+
+
     def to_xml(self):
         rule_dict = self.to_dict()
 
@@ -56,7 +86,8 @@ class IDSRule:
             label_element = ET.SubElement(consequent, label)
             label_element.text = value
 
-        return rule 
+
+        return rule
 
 
     def calculate_cover(self, quant_dataframe):

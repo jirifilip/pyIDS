@@ -7,10 +7,10 @@ from .ids_ruleset import IDSRuleSet
 from .ids_objective_function import IDSObjectiveFunction, ObjectiveFunctionParameters
 from .ids_optimizer import SLSOptimizer, DLSOptimizer
 
-from .model_selection import encode_label, calculate_ruleset_statistics
+from ..model_selection import encode_label, calculate_ruleset_statistics
 
 from sklearn.metrics import f1_score, accuracy_score, roc_auc_score
-from .model_selection import mode
+from ..model_selection import mode
 import scipy
 
 import numpy as np

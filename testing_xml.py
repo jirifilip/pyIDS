@@ -1,5 +1,5 @@
 import pandas as pd
-from pyids.ids_classifier import mine_IDS_ruleset
+from pyids import mine_IDS_ruleset
 
 import xml.etree.ElementTree as ET
 
@@ -10,6 +10,8 @@ ids_ruleset = mine_IDS_ruleset(iris, 20)
 ids_rules = list(ids_ruleset.ruleset)
 tmp = ids_rules[0].to_dict()
 
-et = ids_ruleset.to_xml()
+rule0 = list(ids_ruleset.ruleset)[0]
 
-et.write("tmp.xml")
+ET.dump(rule0.to_ruleml_xml())
+
+print(rule0.to_dict())

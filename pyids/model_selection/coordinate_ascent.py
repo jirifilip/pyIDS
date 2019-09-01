@@ -1,6 +1,6 @@
 import numpy as np
 
-from ..ids_cacher import IDSCacher
+from ..data_structures.ids_cacher import IDSCacher
 
 
 

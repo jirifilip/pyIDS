@@ -1,5 +1,5 @@
 import pandas as pd
-from pyids.ids_classifier import IDS, mine_CARs
+from pyids.data_structures import IDS, mine_CARs
 
 from pyarc.qcba.data_structures import QuantitativeDataFrame
 

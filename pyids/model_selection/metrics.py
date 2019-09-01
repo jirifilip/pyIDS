@@ -1,4 +1,4 @@
-from ..ids_ruleset import IDSRuleSet
+from ..data_structures.ids_ruleset import IDSRuleSet
 from pyarc.qcba.data_structures import QuantitativeDataFrame
 
 import numpy as np

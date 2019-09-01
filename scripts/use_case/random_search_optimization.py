@@ -11,7 +11,7 @@ from pyids.rule_mining import RuleMiner
 df = pd.read_csv("../../data/titanic.csv")
 
 rm = RuleMiner()
-cars = rm.mine_rules(df, minsup=0.001)
+cars = rm.mine_rules(df, minsup=0.005)
 
 ids_ruleset = IDSRuleSet.from_cba_rules(cars)
 

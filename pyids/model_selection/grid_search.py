@@ -1,8 +1,8 @@
 import numpy as np
 import itertools
 
-from ..ids_cacher import IDSCacher
-from ..ids_ruleset import IDSRuleSet
+from ..data_structures.ids_cacher import IDSCacher
+from ..data_structures.ids_ruleset import IDSRuleSet
 
 from .metrics import calculate_ruleset_statistics
 from .param_space_optimizer import ParameterSpaceOptimizer
