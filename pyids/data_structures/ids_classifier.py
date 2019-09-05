@@ -20,7 +20,25 @@ class IDSClassifier:
     
     def __init__(self, rules):
         self.rules = rules
+        self.default_class = None
+        self.quant_dataframe_train = None
+
         
+    def calculate_default_class(self):
+        predicted_classes = self.predict(self.quant_dataframe_train)
+        not_classified_idxes = [ idx for idx, val in enumerate(predicted_classes) if val == None ]
+        classes = self.quant_dataframe_train.dataframe.iloc[:, -1]
+
+        actual_classes = self.quant_dataframe_train.dataframe.iloc[not_classified_idxes, -1]
+
+        # return random class
+        if not list(actual_classes):
+            self.default_class = random.sample(np.unique(classes), 1)[0]
+
+        else:
+            minority_class = mode(actual_classes)
+
+            self.default_class = minority_class
 
 
     def get_prediction_rules(self, quant_dataframe):
@@ -46,6 +64,9 @@ class IDSClassifier:
             
         # rules in rows, instances in columns
         y_pred_array = np.array(list(y_pred_dict.values()))
+
+        y_pred_dict = dict(sorted(y_pred_dict.items(), key=lambda item: item[0], reverse=True))
+
 
         y_pred = []
 
@@ -93,7 +114,7 @@ class IDSClassifier:
         if type(quant_dataframe) != QuantitativeDataFrame:
             print("Type of quant_dataframe must be QuantitativeDataFrame")
 
-        
+        """
         Y = quant_dataframe.dataframe.iloc[:,-1]
         y_pred_dict = dict()
 
@@ -107,6 +128,7 @@ class IDSClassifier:
 
             y_pred_dict.update({rule_f1_score: y_pred_per_rule})
 
+        y_pred_dict = dict(sorted(y_pred_dict.items(), key=lambda item: item[0], reverse=True))
             
         # rules in rows, instances in columns
         y_pred_array = np.array(list(y_pred_dict.values()))
@@ -144,7 +166,34 @@ class IDSClassifier:
             y_pred = len(Y) * [mode(Y)]
 
             return y_pred
+        """
 
+
+        predicted_classes = []
+    
+        for _, row in quant_dataframe.dataframe.iterrows():
+            appended = False
+            for rule in self.rules:
+                antecedent_dict = dict(rule.car.antecedent)  
+                counter = True
+
+                for name, value in row.iteritems():
+                    if name in antecedent_dict:
+                        rule_value = antecedent_dict[name]
+
+                        counter &= rule_value == value
+
+                if counter:
+                    _, predicted_class = rule.car.consequent
+                    predicted_classes.append(predicted_class)
+                    appended = True
+                    break
+                    
+            if not appended:
+                predicted_classes.append(self.default_class)
+
+                    
+        return predicted_classes
 
 
 
@@ -160,12 +209,10 @@ class IDS:
         )
     
 
-    def fit(self, quant_dataframe, class_association_rules = None, lambda_array=7*[1], algorithm="SLS", debug=True, objective_scale_factor=1):
+    def fit(self, quant_dataframe, class_association_rules = None, lambda_array=7*[1], algorithm="SLS", default_class="majority_class_in_all", debug=True, objective_scale_factor=1):
         if type(quant_dataframe) != QuantitativeDataFrame:
             raise Exception("Type of quant_dataframe must be QuantitativeDataFrame")
 
-
-        
 
         # init params
         params = ObjectiveFunctionParameters()
@@ -190,6 +237,13 @@ class IDS:
         solution_set = optimizer.optimize()
 
         self.clf = IDSClassifier(solution_set)
+        self.clf.rules = sorted(self.clf.rules, reverse=True)
+        self.clf.quant_dataframe_train = quant_dataframe
+
+        if default_class == "majority_class_in_all":
+            self.clf.default_class = mode(quant_dataframe.dataframe.iloc[:, -1])
+        elif default_class == "majority_class_in_uncovered":
+            self.clf.calculate_default_class()
 
         return self
 
@@ -300,6 +354,8 @@ class IDSOneVsAll:
 
 
     def fit(self, quant_dataframe, cars=None, rule_cutoff=30, lambda_array=7*[1], class_name=None, debug=False, algorithm="SLS"):
+
+        self.quant_dataframe_train = quant_dataframe
 
         self._prepare(quant_dataframe, class_name)
 

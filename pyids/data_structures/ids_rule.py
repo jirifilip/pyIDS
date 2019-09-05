@@ -2,6 +2,7 @@ from pyarc.qcba.data_structures import QuantitativeDataFrame
 
 import numpy as np
 import xml.etree.ElementTree as ET
+from scipy import stats as st
 
 
 class IDSRule:
@@ -18,8 +19,12 @@ class IDSRule:
         )
         self.cache_prepared = False
     
+    def calc_f1(self):
+        return st.hmean([self.car.support, self.car.confidence])
+
     def __repr__(self):
-        return "IDS-" + repr(self.car)
+        f1 = self.calc_f1()
+        return "IDS-" + repr(self.car) + " f1: {}".format(f1)
 
     def __len__(self):
         return len(self.car.antecedent)
@@ -206,3 +211,23 @@ class IDSRule:
         class_column_cover = quant_dataframe.dataframe.iloc[:,-1].values != self.car.consequent.value
 
         return np.logical_and(rule_cover, class_column_cover)
+
+    
+    def __gt__(self, other):
+        """
+        precedence operator. Determines if this rule
+        has higher precedence. Rules are sorted according
+        to their f1 score.
+        """
+
+        f1_score_self = self.calc_f1()
+        f1_score_other = other.calc_f1()
+
+
+        return f1_score_self > f1_score_other
+
+    def __lt__(self, other):
+        """
+        rule precedence operator
+        """
+        return not self > other
