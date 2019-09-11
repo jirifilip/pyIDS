@@ -6,9 +6,14 @@ from .ids_ruleset import IDSRuleSet
 
 class RSOptimizer:
     
-    def __init__(self, input_set, probability=0.5):
+    def __init__(self, input_set, probability=0.5, random_seed=None):
+        print("RANDOM SEED", random_seed)
+
         self.input_set = input_set
         self.solution_set = set()
+
+        if random_seed:
+            random.seed(random_seed)
         
         self.probability = probability
         
@@ -30,12 +35,17 @@ class RSOptimizer:
 
 class SLSOptimizer:
     
-    def __init__(self, objective_function, objective_func_params, debug=True):
+    def __init__(self, objective_function, objective_func_params, debug=True, random_seed=None):
+        print("RANDOM SEED", random_seed)
+        
         self.delta = 0.33
         self.objective_function_params = objective_func_params 
         self.objective_function = objective_function
-        self.rs_optimizer = RSOptimizer(self.objective_function_params.params["all_rules"].ruleset)
+        self.rs_optimizer = RSOptimizer(self.objective_function_params.params["all_rules"].ruleset, random_seed=random_seed)
         self.debug = debug
+
+        if random_seed:
+            np.random.seed(random_seed)
     
     def compute_OPT(self):
         solution_set = self.rs_optimizer.optimize()
@@ -172,7 +182,7 @@ class SLSOptimizer:
 # Deterministic Local Search
 class DLSOptimizer:
     
-    def __init__(self, objective_function, objective_func_params, debug=True):
+    def __init__(self, objective_function, objective_func_params, debug=True, random_seed=None):
         self.objective_function_params = objective_func_params 
         self.objective_function = objective_function
         self.debug = debug

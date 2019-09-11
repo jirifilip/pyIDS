@@ -209,7 +209,7 @@ class IDS:
         )
     
 
-    def fit(self, quant_dataframe, class_association_rules = None, lambda_array=7*[1], algorithm="SLS", default_class="majority_class_in_all", debug=True, objective_scale_factor=1):
+    def fit(self, quant_dataframe, class_association_rules = None, lambda_array=7*[1], algorithm="SLS", default_class="majority_class_in_all", debug=True, objective_scale_factor=1, random_seed=None):
         if type(quant_dataframe) != QuantitativeDataFrame:
             raise Exception("Type of quant_dataframe must be QuantitativeDataFrame")
 
@@ -232,7 +232,7 @@ class IDS:
         # objective function
         objective_function = IDSObjectiveFunction(objective_func_params=params, cacher=self.cacher, scale_factor=objective_scale_factor)
 
-        optimizer = self.algorithms[algorithm](objective_function, params, debug=debug)
+        optimizer = self.algorithms[algorithm](objective_function, params, debug=debug, random_seed=random_seed)
 
         solution_set = optimizer.optimize()
 
@@ -426,9 +426,13 @@ class IDSOneVsAll:
 
 
 
-def mine_CARs(df, rule_cutoff, sample=False):
+def mine_CARs(df, rule_cutoff, sample=False, random_seed=None, **top_rules_kwargs):
+    if random_seed:
+        random.seed(random_seed)
+        np.random.seed(random_seed)
+
     txns = TransactionDB.from_DataFrame(df)
-    rules = top_rules(txns.string_representation, appearance=txns.appeardict)
+    rules = top_rules(txns.string_representation, appearance=txns.appeardict, **top_rules_kwargs)
     cars = createCARs(rules)
 
     cars_subset = cars[:rule_cutoff]
@@ -439,8 +443,8 @@ def mine_CARs(df, rule_cutoff, sample=False):
     return cars_subset
 
 
-def mine_IDS_ruleset(df, rule_cutoff):
-    cars_subset = mine_CARs(df, rule_cutoff)
+def mine_IDS_ruleset(df, rule_cutoff, random_seed=None, **top_rules_kwargs):
+    cars_subset = mine_CARs(df, rule_cutoff, random_seed=random_seed, **top_rules_kwargs)
     ids_rls_subset = map(IDSRule, cars_subset)
     ids_ruleset = IDSRuleSet(ids_rls_subset)
 
