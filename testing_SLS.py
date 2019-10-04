@@ -8,13 +8,7 @@ import random
 
 
 df = pd.read_csv("./data/titanic.csv")
-
-
-cars = mine_CARs(df, rule_cutoff=10, target_rule_count=1000, conf_step=0.20, random_seed=5)
-for r in cars:
-    print(r)
-
-print("=======")
+cars = mine_CARs(df, 40)
 
 quant_dataframe = QuantitativeDataFrame(df)
 
@@ -24,6 +18,7 @@ ids.fit(class_association_rules=cars, quant_dataframe=quant_dataframe, debug=Fal
 
 auc = ids.score_auc(quant_dataframe)
 print(auc)
+
 
 for r in ids.clf.rules:
     print(r)

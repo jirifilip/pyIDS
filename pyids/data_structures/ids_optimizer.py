@@ -7,13 +7,12 @@ from .ids_ruleset import IDSRuleSet
 class RSOptimizer:
     
     def __init__(self, input_set, probability=0.5, random_seed=None):
-        print("RANDOM SEED", random_seed)
 
         self.input_set = input_set
         self.solution_set = set()
 
         if random_seed:
-            random.seed(random_seed)
+            np.random.seed(random_seed)
         
         self.probability = probability
         
@@ -22,7 +21,7 @@ class RSOptimizer:
         solution_set = set()
     
         for member in self.input_set:
-            if random.random() <= self.probability:
+            if np.random.uniform() <= self.probability:
                 solution_set.add(member)
                 
         
@@ -36,8 +35,6 @@ class RSOptimizer:
 class SLSOptimizer:
     
     def __init__(self, objective_function, objective_func_params, debug=True, random_seed=None):
-        print("RANDOM SEED", random_seed)
-        
         self.delta = 0.33
         self.objective_function_params = objective_func_params 
         self.objective_function = objective_function
@@ -130,7 +127,7 @@ class SLSOptimizer:
 
             for rule_idx, rule in enumerate(soln_set.ruleset):
                 if omega_estimates[rule_idx] < -2.0/(n*n) * OPT:
-                    soln_set.ruleset.remove(rule_idx)
+                    soln_set.ruleset.remove(rule)
                     restart_omega_computations = True
 
                     if self.debug:

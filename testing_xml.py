@@ -1,17 +1,28 @@
 import pandas as pd
-from pyids import mine_IDS_ruleset
 
-import xml.etree.ElementTree as ET
+from pyarc.qcba.data_structures import QuantitativeDataFrame
 
-iris = pd.read_csv("./data/iris0.csv")
+from pyids.data_structures import IDS, mine_IDS_ruleset, mine_CARs
+from pyids.data_structures import IDSRuleSet
+from pyids.rule_mining import RuleMiner
+from pyids.model_selection import CoordinateAscentOptimizer, train_test_split_pd
 
-ids_ruleset = mine_IDS_ruleset(iris, 20)
 
-ids_rules = list(ids_ruleset.ruleset)
-tmp = ids_rules[0].to_dict()
+df = pd.read_csv("./data/titanic.csv")
 
-rule0 = list(ids_ruleset.ruleset)[0]
+cars = mine_CARs(df, 80)
 
-ET.dump(rule0.to_ruleml_xml())
+ids_ruleset = IDSRuleSet.from_cba_rules(cars)
 
-print(rule0.to_dict())
+
+df_train, df_test = train_test_split_pd(df, prop=0.25)
+quant_df_train, quant_df_test = QuantitativeDataFrame(df_train), QuantitativeDataFrame(df_test)
+
+
+
+coordinate_ascent = CoordinateAscentOptimizer(IDS(), maximum_delta_between_iterations=200, maximum_score_estimation_iterations=10, ternary_search_precision=20, maximum_consecutive_iterations=20)
+lambda_array = coordinate_ascent.fit(ids_ruleset, quant_df_train, quant_df_test)
+
+print(lambda_array)
+
+

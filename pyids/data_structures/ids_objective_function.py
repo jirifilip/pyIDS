@@ -40,7 +40,9 @@ class IDSObjectiveFunction:
         return f0
     
     def f1(self, solution_set):
-        L_max = solution_set.max_rule_length()
+        all_rules = self.objective_func_params.params["all_rules"]
+        all_rules_lengths = [ len(rule) for rule in all_rules.ruleset ]
+        L_max = max(all_rules_lengths)
         len_all_rules = self.objective_func_params.params["len_all_rules"]
 
         f1 = L_max * len_all_rules - solution_set.sum_rule_length()
