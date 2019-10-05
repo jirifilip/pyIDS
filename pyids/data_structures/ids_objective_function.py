@@ -20,9 +20,11 @@ class IDSObjectiveFunction:
         self.objective_func_params = objective_func_params
         self.scale_factor = scale_factor
 
-
         all_rules = self.objective_func_params.params["all_rules"]
         quant_dataframe = self.objective_func_params.params["quant_dataframe"]
+
+        all_rules_lengths = [ len(rule) for rule in all_rules.ruleset ]
+        self.L_max = max(all_rules_lengths)
 
         if not cacher:
             self.cacher = IDSCacher()
@@ -40,9 +42,7 @@ class IDSObjectiveFunction:
         return f0
     
     def f1(self, solution_set):
-        all_rules = self.objective_func_params.params["all_rules"]
-        all_rules_lengths = [ len(rule) for rule in all_rules.ruleset ]
-        L_max = max(all_rules_lengths)
+        L_max = self.L_max
         len_all_rules = self.objective_func_params.params["len_all_rules"]
 
         f1 = L_max * len_all_rules - solution_set.sum_rule_length()
