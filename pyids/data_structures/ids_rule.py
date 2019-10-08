@@ -24,7 +24,11 @@ class IDSRule:
 
     def __repr__(self):
         f1 = self.calc_f1()
-        return "IDS-" + repr(self.car) + " f1: {}".format(f1)
+
+        args = [self.car.antecedent.string(), "{" + self.car.consequent.string() + "}", self.car.support, self.car.confidence, f1, self.car.rulelen, self.car.rid]
+        text = "CAR {} => {} sup: {:.2f} conf: {:.2f}, f1: {:.2f}, len: {}, id: {}".format(*args)
+
+        return text
 
     def __len__(self):
         return len(self.car.antecedent)

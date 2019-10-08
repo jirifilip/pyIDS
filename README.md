@@ -16,7 +16,7 @@ training a simple IDS model
 
 ```python
 import pandas as pd
-from pyids.ids_classifier import IDS, mine_CARs
+from pyids.data_structures.ids_classifier import IDS, mine_CARs
 
 from pyarc.qcba.data_structures import QuantitativeDataFrame
 
@@ -37,7 +37,7 @@ training a One-vs-all IDS model
 
 ```python
 import pandas as pd
-from pyids.ids_classifier import IDSOneVsAll, mine_CARs
+from pyids.data_structures.ids_classifier import IDSOneVsAll, mine_CARs
 
 from pyarc.qcba.data_structures import QuantitativeDataFrame
 
@@ -56,7 +56,7 @@ optimizing for best lambda parameters using coordinate ascent, as described in t
 
 ```python
 import pandas as pd
-from pyids.ids_classifier import IDS, mine_IDS_ruleset
+from pyids.data_structures.ids_classifier import IDS, mine_IDS_ruleset
 from pyids.model_selection import CoordinateAscentOptimizer, train_test_split_pd
 
 from pyarc.qcba.data_structures import QuantitativeDataFrame
@@ -80,7 +80,7 @@ or optimizing a One-vs-all IDS model
 
 ```python
 import pandas as pd
-from pyids.ids_classifier import IDSOneVsAll, mine_IDS_ruleset
+from pyids.data_structures.ids_classifier import IDSOneVsAll, mine_IDS_ruleset
 from pyids.model_selection import CoordinateAscentOptimizer, train_test_split_pd
 
 from pyarc.qcba.data_structures import QuantitativeDataFrame
@@ -104,7 +104,7 @@ using k-fold cross validation with AUC score
 
 ```python
 import pandas as pd
-from pyids.ids_classifier import IDSOneVsAll
+from pyids.data_structures.ids_classifier import IDSOneVsAll
 
 dataframes = [ pd.read_csv("./data/iris{}.csv".format(i)) for i in range(10)]
 

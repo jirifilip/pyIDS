@@ -20,7 +20,7 @@ for r in reversed(sorted(cars)):
 
 
 ids = IDS()
-ids.fit(class_association_rules=cars, quant_dataframe=quant_dataframe, debug=True, random_seed=None, lambda_array=[0, 0, 0, 0, 0, 1, 0])
+ids.fit(class_association_rules=cars, quant_dataframe=quant_dataframe, debug=True, random_seed=None, lambda_array=[1, 1, 1, 1, 1, 1, 1])
 
 for r in ids.clf.rules:
     print(r)
