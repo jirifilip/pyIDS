@@ -187,8 +187,10 @@ class IDSClassifier:
                     _, predicted_class = rule.car.consequent
                     predicted_classes.append(predicted_class)
                     appended = True
+
                     break
-                    
+
+                
             if not appended:
                 predicted_classes.append(self.default_class)
 

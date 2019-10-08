@@ -59,7 +59,6 @@ class SLSOptimizer:
             for _ in range(10):
                 temp_soln_set = self.sample_random_set(solution_set.ruleset, delta)
                 temp_soln_set.add(rule)
-                
                 func_val = self.objective_function.evaluate(IDSRuleSet(temp_soln_set))
 
                 exp_include_func_vals.append(func_val)
@@ -77,48 +76,53 @@ class SLSOptimizer:
             variance_exp_exclude = np.var(exp_exclude_func_vals)
             standard_error = math.sqrt(variance_exp_include/len(exp_include_func_vals) + variance_exp_exclude/len(exp_exclude_func_vals))
             
-            if self.debug:
-                print("Standard Error", standard_error)
+            self.debug_message("INFO - stardard error of omega estimate: {}".format(standard_error))
+            
+            if standard_error > error_threshold:
+                self.debug_message("INFO - {} > {} => omega estimation continues".format(standard_error, error_threshold))
 
             if standard_error <= error_threshold:
+                self.debug_message("INFO - omega succesfully estimated")
                 break
 
         return np.mean(exp_include_func_vals) - np.mean(exp_exclude_func_vals)
     
+    def debug_message(self, message):
+        if self.debug:
+            print(message)
+
     def optimize_delta(self, delta, delta_prime):
         all_rules = self.objective_function_params.params["all_rules"]
         OPT = self.compute_OPT()
         n = len(all_rules)
+        
+        self.debug_message("INFO - Number of input rules: {}".format(n))
+        self.debug_message("INFO - RandomOptimizer estimated the OPTIMUM value as: {}".format(OPT))
+        self.debug_message("INFO - Threshold value (2/(n*n) * OPT) = {}. This is the standard error treshold value.".format(2.0/(n*n)*OPT))
 
         soln_set = IDSRuleSet(set())
 
-        if self.debug:        
-            print("2/(n*n) * OPTIMUM VALUE =", 2.0/(n*n)*OPT)
-
-        
         restart_omega_computations = False
     
         while True:
             omega_estimates = []
             for rule in all_rules.ruleset:
 
-                if self.debug:
-                    print("Estimating omega for rule", rule, sep="\n")
-                
-                omega_est = self.estimate_omega(rule, soln_set, 0.5*1/(n*n) * OPT, delta)
-                #omega_est = self.estimate_omega(rule, soln_set, 1/(n*n) * OPT, delta)
-                omega_estimates.append(omega_est)
-
                 if rule in soln_set.ruleset:
                     continue
+
+                self.debug_message("INFO - Estimating omega for rule: {}".format(rule))
+
+                omega_est = self.estimate_omega(rule, soln_set, 1.0/(n*n) * OPT, delta)
+                omega_estimates.append(omega_est)
 
                 if omega_est > 2.0/(n*n) * OPT:
                     # add this element to solution set and recompute omegas
                     soln_set.ruleset.add(rule)
                     restart_omega_computations = True
                     
-                    if self.debug:
-                        print("adding rule to solution set")
+                    self.debug_message("Adding rule: {} to the solution set.".format(rule))
+                    
                     break    
 
             if restart_omega_computations: 
@@ -130,8 +134,7 @@ class SLSOptimizer:
                     soln_set.ruleset.remove(rule)
                     restart_omega_computations = True
 
-                    if self.debug:
-                        print("removing rule from solution set")
+                    self.debug_message("Removing rule: {} from the solution set.".format(rule))
                     break
 
             if restart_omega_computations: 
