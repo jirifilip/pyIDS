@@ -9,6 +9,16 @@ If you find this package useful in your research, please cite our paper on this 
     Jiri Filip, Tomas Kliegr. PyIDS - Python Implementation of Interpretable Decision Sets Algorithm by Lakkaraju et al, 2016. RuleML+RR2019@Rule Challenge 2019. http://ceur-ws.org/Vol-2438/paper8.pdf
 
 
+# Installation
+
+The `pyarc`, `pandas`, `stats` and `numpy` packages need to be installed before using pyIDS.
+
+All of these packages can be installed using `pip`.
+
+For [`pyarc`](https://github.com/jirifilip/pyARC), please refer to the *Installation* section of its README file.
+```
+
+```
 
 # Examples
 

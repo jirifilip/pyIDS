@@ -55,10 +55,11 @@ class SLSOptimizer:
         exp_exclude_func_vals = []
 
         while True:
-
+            
             for _ in range(10):
                 temp_soln_set = self.sample_random_set(solution_set.ruleset, delta)
                 temp_soln_set.add(rule)
+                
                 func_val = self.objective_function.evaluate(IDSRuleSet(temp_soln_set))
 
                 exp_include_func_vals.append(func_val)
