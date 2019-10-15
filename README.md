@@ -11,7 +11,7 @@ If you find this package useful in your research, please cite our paper on this 
 
 # Installation
 
-The `pyarc`, `pandas`, `stats` and `numpy` packages need to be installed before using pyIDS.
+The `pyarc`, `pandas`, `scipy` and `numpy` packages need to be installed before using pyIDS.
 
 All of these packages can be installed using `pip`.
 
