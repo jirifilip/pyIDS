@@ -16,9 +16,6 @@ The `pyarc`, `pandas`, `stats` and `numpy` packages need to be installed before 
 All of these packages can be installed using `pip`.
 
 For [`pyarc`](https://github.com/jirifilip/pyARC), please refer to the *Installation* section of its README file.
-```
-
-```
 
 # Examples
 
