@@ -274,7 +274,7 @@ class DLSOptimizer:
 
                 if func_val > (1 + epsilon/(n*n)) * soln_set_objective_value:
                     # add this element to solution set and recompute omegas
-                    soln_set.ruleset.add(rule)
+                    soln_set.ruleset.remove(rule)
                     soln_set_objective_value = func_val
                     restart_computations = True
                     
