@@ -1,0 +1,4 @@
+numpy==1.18.1
+pandas==1.0.4
+pyarc @ git+https://github.com/viaduct-ai/pyARC.git@85ae0cf86cacd731d5d265ccf591a0800f143719
+scipy==1.4.1
