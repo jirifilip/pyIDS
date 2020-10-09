@@ -290,3 +290,90 @@ class DLSOptimizer:
 
             return soln_set
     
+
+class DeterministicUSMOptimizer:
+
+    def __init__(self, objective_function, objective_func_params, debug=True):
+        self.objective_function_params = objective_func_params 
+        self.objective_function = objective_function
+        self.debug = debug
+
+    def optimize(self):
+        all_rules = self.objective_function_params.params["all_rules"]
+
+        x0 = set()
+        y0 = set(all_rules)
+
+        n = len(y0)
+
+        for rule in all_rules:
+            a_set = IDSRuleSet(x0 + {rule})
+            b_set = IDSRuleSet(y0 - {rule})
+
+            a_value = self.objective_function.evaluate(a_set) - self.objective_function.evaluate(x0)
+            b_value = self.objective_function.evaluate(b_set) - self.objective_function.evaluate(y0)
+
+            if a_value > b_value:
+                x0.add(rule)
+            else:
+                y0.remove(rule)
+
+
+        x_value = self.objective_function.evaluate(x0)
+        y_value = self.objective_function.evaluate(y0)
+
+        if x_value > y_value:
+            return x_value
+        else:
+            return y_value
+
+
+
+class RandomizedUSMOptimizer:
+
+    def __init__(self, objective_function, objective_func_params, debug=True, random_seed=None):
+        self.objective_function_params = objective_func_params 
+        self.objective_function = objective_function
+        self.debug = debug
+
+        if random_seed:
+            np.random.seed(random_seed)
+
+    def optimize(self):
+        all_rules = self.objective_function_params.params["all_rules"]
+
+        x0 = IDSRuleSet(set())
+        y0 = IDSRuleSet({rule for rule in all_rules.ruleset})
+
+        n = len(y0)
+
+        for rule in all_rules.ruleset:
+            a_set = IDSRuleSet(x0.ruleset | {rule})
+            b_set = IDSRuleSet(y0.ruleset - {rule})
+
+            a_value = self.objective_function.evaluate(a_set) - self.objective_function.evaluate(x0)
+            b_value = self.objective_function.evaluate(b_set) - self.objective_function.evaluate(y0)
+
+            a_max = max(a_value, 0)
+            b_max = max(b_value, 0)
+
+            x_probability = 1
+            y_probability = 0
+
+            if not (a_max == 0 and b_max == 0):
+                x_probability = a_max / (a_max + b_max)
+                y_probability = b_max / (a_max + b_max)
+
+            if np.random.uniform() <= x_probability:
+                x0.ruleset.add(rule)
+
+            if np.random.uniform() <= y_probability:
+                y0.ruleset.remove(rule)                
+
+        x_value = self.objective_function.evaluate(x0)
+        y_value = self.objective_function.evaluate(y0)
+
+        if x_value > y_value:
+            return x0.ruleset
+        else:
+            return y0.ruleset

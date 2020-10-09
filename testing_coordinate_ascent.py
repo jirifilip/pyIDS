@@ -14,12 +14,18 @@ df = pd.read_csv("./data/iris0.csv")
 
 
 
-ids_ruleset = mine_IDS_ruleset(df, rule_cutoff=20)
+ids_ruleset = mine_IDS_ruleset(df, rule_cutoff=40)
 
 quant_dataframe = QuantitativeDataFrame(df)
 
 
 
-coordinate_ascent = CoordinateAscentOptimizer(IDSOneVsAll(), debug=True, maximum_delta_between_iterations=200, maximum_score_estimation_iterations=3, ternary_search_precision=20)
+coordinate_ascent = CoordinateAscentOptimizer(
+    IDSOneVsAll(IDS(algorithm="RUSM")),
+    debug=True,
+    maximum_delta_between_iterations=200,
+    maximum_score_estimation_iterations=1,
+    ternary_search_precision=20
+)
 coordinate_ascent.fit(ids_ruleset, quant_dataframe, quant_dataframe)
 

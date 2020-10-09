@@ -12,7 +12,7 @@ def encode_label(actual, predicted):
     
     actual = np.copy(actual)
     predicted = np.copy(predicted)
-    
+
     for idx, level in enumerate(levels):
         actual[actual == level] = idx
         predicted[predicted == level] = idx

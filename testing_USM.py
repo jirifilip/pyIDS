@@ -19,8 +19,8 @@ for r in reversed(sorted(cars)):
 
 
 start = time.time()
-ids = IDS()
-ids.fit(class_association_rules=cars, quant_dataframe=quant_dataframe, debug=False, random_seed=None, lambda_array=[1, 0, 0, 0, 0, 0, 0])
+ids = IDS(algorithm="RUSM")
+ids.fit(class_association_rules=cars, quant_dataframe=quant_dataframe, debug=False, random_seed=None, lambda_array=[1, 1, 1, 1, 1, 1, 1])
 end = time.time()
 
 print(end - start)
@@ -29,3 +29,5 @@ for r in ids.clf.rules:
     print(r)
 
 auc = ids.score_auc(quant_dataframe)
+
+print("AUC", auc)

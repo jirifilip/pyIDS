@@ -5,7 +5,7 @@ from pyarc.algorithms import top_rules, createCARs
 from .ids_rule import IDSRule
 from .ids_ruleset import IDSRuleSet
 from .ids_objective_function import IDSObjectiveFunction, ObjectiveFunctionParameters
-from .ids_optimizer import SLSOptimizer, DLSOptimizer
+from .ids_optimizer import SLSOptimizer, DLSOptimizer, DeterministicUSMOptimizer, RandomizedUSMOptimizer
 
 from ..model_selection import encode_label, calculate_ruleset_statistics
 
@@ -15,12 +15,14 @@ import scipy
 
 import numpy as np
 import random
+import copy
 
 class IDSClassifier:
     
     def __init__(self, rules):
         self.rules = rules
         self.default_class = None
+        self.default_class_confidence = None
         self.quant_dataframe_train = None
 
         
@@ -29,145 +31,23 @@ class IDSClassifier:
         not_classified_idxes = [ idx for idx, val in enumerate(predicted_classes) if val == None ]
         classes = self.quant_dataframe_train.dataframe.iloc[:, -1]
 
-        actual_classes = self.quant_dataframe_train.dataframe.iloc[not_classified_idxes, -1]
+        actual_classes = list(self.quant_dataframe_train.dataframe.iloc[not_classified_idxes, -1])
 
         # return random class
         if not list(actual_classes):
-            self.default_class = random.sample(np.unique(classes), 1)[0]
+            self.default_class = random.sample(list(np.unique(classes)), 1)[0]
+            self.default_class_confidence = 1
 
         else:
             minority_class = mode(actual_classes)
 
             self.default_class = minority_class
-
-
-    def get_prediction_rules(self, quant_dataframe):
-        if type(quant_dataframe) != QuantitativeDataFrame:
-            print("Type of quant_dataframe must be QuantitativeDataFrame")
-
-        
-        Y = quant_dataframe.dataframe.iloc[:,-1]
-        y_pred_dict = dict()
-        rules_f1 = dict()
-
-        for rule in self.rules:
-
-            conf = rule.car.confidence
-            sup = rule.car.support
-            
-            y_pred_per_rule = rule.predict(quant_dataframe)
-            rule_f1_score = scipy.stats.hmean([conf, sup])
-
-            y_pred_dict.update({rule_f1_score: y_pred_per_rule})
-            rules_f1.update({rule_f1_score: rule})
-
-            
-        # rules in rows, instances in columns
-        y_pred_array = np.array(list(y_pred_dict.values()))
-
-        y_pred_dict = dict(sorted(y_pred_dict.items(), key=lambda item: item[0], reverse=True))
-
-
-        y_pred = []
-
-        minority_classes = []
-
-        rule_list = list(self.rules)
-
-        if y_pred_dict:
-            for i in range(len(Y)):
-                all_NA = np.all(y_pred_array[:,i] == IDSRule.DUMMY_LABEL)
-                if all_NA:
-                    minority_classes.append(Y[i])
-
-            # if the ruleset covers all instances                     
-            default_class = len(Y == Y[0]) / len(Y)
-            default_class_label = Y[0]
-
-            if minority_classes:
-                default_class = len(Y == mode(minority_classes)) / len(Y)
-                default_class_label = mode(minority_classes)
-
-            for i in range(len(Y)):
-                y_pred_array_datacase = y_pred_array[:,i]
-                non_na_mask = y_pred_array_datacase != IDSRule.DUMMY_LABEL
-                
-                y_pred_array_datacase_non_na = np.where(non_na_mask)[0]
-                
-                if len(y_pred_array_datacase_non_na) > 0:
-                    rule_index = y_pred_array_datacase_non_na[0]
-                    rule = rule_list[rule_index]
-
-                    y_pred.append((rule.car.confidence, rule.car.consequent.value))
-                else:
-                    y_pred.append((default_class, default_class_label))
-
-            return y_pred
-
-        else:
-            y_pred = len(Y) * [np.inf]
-
-            return y_pred
+            self.default_class_confidence = actual_classes.count(minority_class) / len(actual_classes)
 
 
     def predict(self, quant_dataframe):
         if type(quant_dataframe) != QuantitativeDataFrame:
             print("Type of quant_dataframe must be QuantitativeDataFrame")
-
-        """
-        Y = quant_dataframe.dataframe.iloc[:,-1]
-        y_pred_dict = dict()
-
-        for rule in self.rules:
-
-            conf = rule.car.confidence
-            sup = rule.car.support
-            
-            y_pred_per_rule = rule.predict(quant_dataframe)
-            rule_f1_score = scipy.stats.hmean([conf, sup])
-
-            y_pred_dict.update({rule_f1_score: y_pred_per_rule})
-
-        y_pred_dict = dict(sorted(y_pred_dict.items(), key=lambda item: item[0], reverse=True))
-            
-        # rules in rows, instances in columns
-        y_pred_array = np.array(list(y_pred_dict.values()))
-
-        y_pred = []
-
-        minority_classes = []
-
-        if y_pred_dict:
-            for i in range(len(Y)):
-                all_NA = np.all(y_pred_array[:,i] == IDSRule.DUMMY_LABEL)
-                if all_NA:
-                    minority_classes.append(Y[i])
-
-            # if the ruleset covers all instances                     
-            default_class = Y[0]
-
-            if minority_classes:
-                default_class = mode(minority_classes)
-
-            for i in range(len(Y)):
-                y_pred_array_datacase = y_pred_array[:,i]
-                non_na_mask = y_pred_array_datacase != IDSRule.DUMMY_LABEL
-                
-                y_pred_array_datacase_non_na = y_pred_array_datacase[non_na_mask]
-                
-                if len(y_pred_array_datacase_non_na) > 0:
-                    y_pred.append(y_pred_array_datacase_non_na[0])
-                else:
-                    y_pred.append(default_class)
-
-            return y_pred
-
-        else:
-            y_pred = len(Y) * [mode(Y)]
-
-            return y_pred
-        """
-
 
         predicted_classes = []
     
@@ -186,6 +66,7 @@ class IDSClassifier:
                 if counter:
                     _, predicted_class = rule.car.consequent
                     predicted_classes.append(predicted_class)
+
                     appended = True
 
                     break
@@ -198,20 +79,23 @@ class IDSClassifier:
         return predicted_classes
 
 
-
 class IDS:
 
-    def __init__(self):
+    def __init__(self, algorithm="SLS"):
         self.clf = None
         self.cacher = None
         self.ids_ruleset = None
         self.algorithms = dict(
             SLS=SLSOptimizer,
-            DLS=DLSOptimizer
+            DLS=DLSOptimizer,
+            DUSM=DeterministicUSMOptimizer,
+            RUSM=RandomizedUSMOptimizer
         )
+
+        self.algorithm = algorithm
     
 
-    def fit(self, quant_dataframe, class_association_rules = None, lambda_array=7*[1], algorithm="SLS", default_class="majority_class_in_all", debug=True, objective_scale_factor=1, random_seed=None):
+    def fit(self, quant_dataframe, class_association_rules=None, lambda_array=7*[1], default_class="majority_class_in_uncovered", debug=True, objective_scale_factor=1, random_seed=None):
         if type(quant_dataframe) != QuantitativeDataFrame:
             raise Exception("Type of quant_dataframe must be QuantitativeDataFrame")
 
@@ -234,7 +118,7 @@ class IDS:
         # objective function
         objective_function = IDSObjectiveFunction(objective_func_params=params, cacher=self.cacher, scale_factor=objective_scale_factor)
 
-        optimizer = self.algorithms[algorithm](objective_function, params, debug=debug, random_seed=random_seed)
+        optimizer = self.algorithms[self.algorithm](objective_function, params, debug=debug, random_seed=random_seed)
 
         solution_set = optimizer.optimize()
 
@@ -243,7 +127,9 @@ class IDS:
         self.clf.quant_dataframe_train = quant_dataframe
 
         if default_class == "majority_class_in_all":
-            self.clf.default_class = mode(quant_dataframe.dataframe.iloc[:, -1])
+            classes = quant_dataframe.dataframe.iloc[:, -1]
+            self.clf.default_class = mode(classes)
+            self.clf.default_class_confidence = classes.count(self.clf.default_class) / len(classes)
         elif default_class == "majority_class_in_uncovered":
             self.clf.calculate_default_class()
 
@@ -256,41 +142,50 @@ class IDS:
     def get_prediction_rules(self, quant_dataframe):
         return self.clf.get_prediction_rules(quant_dataframe)
 
-
     def score(self, quant_dataframe, metric=accuracy_score):
         pred = self.predict(quant_dataframe)
         actual = quant_dataframe.dataframe.iloc[:,-1].values
-
         return metric(pred, actual)
 
     def _calculate_auc_for_ruleconf(self, quant_dataframe):
-        conf_pred = self.clf.get_prediction_rules(quant_dataframe)
+        if type(quant_dataframe) != QuantitativeDataFrame:
+            print("Type of quant_dataframe must be QuantitativeDataFrame")
 
+        
         confidences = []
-        predicted_classes = []
+    
+        for _, row in quant_dataframe.dataframe.iterrows():
+            appended = False
+            for rule in self.rules:
+                antecedent_dict = dict(rule.car.antecedent)  
+                counter = True
 
-        for conf, predicted_class in conf_pred:
-            confidences.append(conf)
-            predicted_classes.append(predicted_class)
+                for name, value in row.iteritems():
+                    if name in antecedent_dict:
+                        rule_value = antecedent_dict[name]
 
+                        counter &= rule_value == value
+
+                if counter:
+                    confidences.append(rule.car.confidence)
+
+                    appended = True
+
+                    break
+
+                
+            if not appended:
+                confidences.append(self.clf.default_class_confidence)
+
+                    
         actual_classes = quant_dataframe.dataframe.iloc[:, -1].values
+        predicted_classes = self.predict(quant_dataframe)
 
         actual, pred = encode_label(actual_classes, predicted_classes)
 
-        corrected_confidences = []
+        corrected_confidences = np.where(pred == "1", predicted_classes, 1 - predicted_classes)
 
-        for conf, predicted_class_label in zip(confidences, pred):
-            if predicted_class_label == None:
-                corrected_confidences.append(1)
-
-            if predicted_class_label == 0:
-                corrected_confidences.append(1 - conf)
-            elif predicted_class_label == 1:
-                corrected_confidences.append(conf)
-            else:
-                raise Exception("Use One-vs-all IDS classifier for calculating AUC for multiclass problems")
-
-        return roc_auc_score(actual, corrected_confidences)
+        return corrected_confidences
 
 
     def _calcutate_auc_classical(self, quant_dataframe):
@@ -318,6 +213,9 @@ class IDS:
 
 
 class IDSOneVsAll:
+
+    def __init__(self, clf_blueprint=None):
+        self.clf_blueprint = clf_blueprint
 
     def _prepare(self, quant_dataframe, class_name):
         if type(quant_dataframe) != QuantitativeDataFrame:
@@ -349,13 +247,16 @@ class IDSOneVsAll:
             
             ids_class_clf = IDS()
 
+            if self.clf_blueprint:
+                ids_class_clf = copy.copy(self.clf_blueprint)
+
             self.ids_classifiers.update({class_ : dict(
                 quant_dataframe=QuantitativeDataFrame(dataframe_restricted),
                 clf=ids_class_clf
             )})
 
 
-    def fit(self, quant_dataframe, cars=None, rule_cutoff=30, lambda_array=7*[1], class_name=None, debug=False, algorithm="SLS"):
+    def fit(self, quant_dataframe, cars=None, rule_cutoff=30, lambda_array=7*[1], class_name=None, debug=False):
 
         self.quant_dataframe_train = quant_dataframe
 
@@ -373,7 +274,7 @@ class IDSOneVsAll:
             cars = createCARs(rules)
             cars.sort(reverse=True)
 
-            clf.fit(quant_dataframe, cars[:rule_cutoff], lambda_array=lambda_array, debug=debug, algorithm=algorithm)
+            clf.fit(quant_dataframe, cars[:rule_cutoff], lambda_array=lambda_array, debug=debug)
 
 
     def _prepare_data_sample(self, quant_dataframe):
