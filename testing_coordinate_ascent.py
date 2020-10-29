@@ -6,7 +6,9 @@ from pyarc.algorithms import createCARs, top_rules
 from pyarc import TransactionDB
 
 
-from pyids.data_structures.ids_classifier import IDS, IDSOneVsAll, mine_IDS_ruleset
+from pyids.algorithms.ids_classifier import mine_IDS_ruleset
+from pyids.algorithms.ids_multiclass import IDSOneVsAll
+from pyids.algorithms.ids import IDS
 from pyids.model_selection import encode_label, mode, CoordinateAscentOptimizer
 
 
@@ -21,8 +23,7 @@ quant_dataframe = QuantitativeDataFrame(df)
 
 
 coordinate_ascent = CoordinateAscentOptimizer(
-    IDSOneVsAll(IDS(algorithm="RUSM")),
-    debug=True,
+    IDSOneVsAll(algorithm="SLS"),
     maximum_delta_between_iterations=200,
     maximum_score_estimation_iterations=1,
     ternary_search_precision=20

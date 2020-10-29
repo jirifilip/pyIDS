@@ -1,1 +1,1 @@
-from .data_structures import IDS, mine_CARs, mine_IDS_ruleset
+from .algorithms.ids import IDS

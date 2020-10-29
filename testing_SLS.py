@@ -1,26 +1,31 @@
 import pandas as pd
 import numpy as np
-from pyids.data_structures import IDS, mine_CARs, IDSRuleSet
+from pyids import IDS
+from pyids.algorithms import mine_CARs
+from pyids.data_structures import IDSRuleSet
 
 from pyarc.qcba.data_structures import QuantitativeDataFrame
 
-import random 
+import random
+import logging
 import time
 
+logging.basicConfig(level=logging.DEBUG)
 
 df = pd.read_csv("./data/titanic.csv")
-cars = mine_CARs(df, 15, sample=False)
+cars = mine_CARs(df, 50, sample=False)
 ids_ruleset = IDSRuleSet.from_cba_rules(cars).ruleset
 
 quant_dataframe = QuantitativeDataFrame(df)
 
-for r in reversed(sorted(cars)):
-    print(r)
-
-
 start = time.time()
-ids = IDS()
-ids.fit(class_association_rules=cars, quant_dataframe=quant_dataframe, debug=False, random_seed=None, lambda_array=[1, 0, 0, 0, 0, 0, 0])
+ids = IDS(algorithm="RUSM")
+ids.fit(
+    class_association_rules=cars,
+    quant_dataframe=quant_dataframe,
+    random_seed=None,
+    lambda_array=[1, 1, 1, 1, 1000000, 1000000000, 1000000]
+)
 end = time.time()
 
 print(end - start)
@@ -28,4 +33,8 @@ print(end - start)
 for r in ids.clf.rules:
     print(r)
 
-auc = ids.score_auc(quant_dataframe)
+auc_cba = ids.score_auc(quant_dataframe, order_type="cba")
+auc_f1 = ids.score_auc(quant_dataframe, order_type="f1")
+
+print(auc_cba, auc_f1)
+print(ids.score(quant_dataframe))

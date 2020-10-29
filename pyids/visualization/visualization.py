@@ -5,7 +5,7 @@ import itertools
 
 from pyarc.qcba.data_structures import QuantitativeDataFrame
 
-from ..ids_classifier import IDS
+from ..ids import IDS
 
 class IDSVisualization:
 

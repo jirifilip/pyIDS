@@ -1,10 +1,7 @@
 import numpy as np
 
 from ..data_structures.ids_cacher import IDSCacher
-
-
-
-
+from typing import Tuple, Dict
 
 
 
@@ -30,7 +27,6 @@ def _ternary_search(func, left, right, absolute_precision, debug=False):
             right = right_third
 
 
-
 class CoordinateAscentOptimizer:
     
     def __init__(self,
@@ -44,15 +40,13 @@ class CoordinateAscentOptimizer:
                  maximum_score_estimation_iterations=1, 
                  score_estimation_function=max,
                  upper_bound_extension_precision=50,
-                 ternary_search_precision=100, 
-                 debug=False):
+                 ternary_search_precision=100):
 
         self.ranges = 1, 1000
 
         self.classifier = classifier
         self.classifier_cache = IDSCacher()
 
-        self.debug = debug
         self.params_len = params_len
 
 
@@ -78,11 +72,10 @@ class CoordinateAscentOptimizer:
         self._debug(self.classifier_params_ranges)
 
     def _debug(self, value, description=""):
-        if self.debug:
-            if description:
-                print(description, value)
-            else:
-                print(value)
+        if description:
+            print(description, value)
+        else:
+            print(value)
         
 
     def _prepare(self, ids_ruleset, quant_dataframe):
@@ -99,7 +92,7 @@ class CoordinateAscentOptimizer:
         for i in range(self.maximum_score_estimation_iterations):
             self._debug(i, "score estimation iteration:")
             
-            self.classifier.fit(quant_dataframe_train, debug=False, lambda_array=lambda_array)
+            self.classifier.fit(quant_dataframe_train, lambda_array=lambda_array)
             score = self.classifier.score_auc(quant_dataframe_test)
 
             self._debug(score, "iteration {} score:".format(i))

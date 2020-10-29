@@ -2,7 +2,7 @@ import pandas as pd
 
 from pyarc.qcba.data_structures import QuantitativeDataFrame
 from pyarc.data_structures import ClassAssocationRule
-from pyids.data_structures.ids_classifier import mine_CARs
+from pyids.algorithms.ids_classifier import mine_CARs
 from pyids import IDS
 
 import numpy as np

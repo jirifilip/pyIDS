@@ -1,5 +1,7 @@
 from pyarc.qcba.data_structures import QuantitativeDataFrame
+from pyarc.data_structures import ClassAssocationRule
 
+from sklearn.metrics import f1_score
 import numpy as np
 import xml.etree.ElementTree as ET
 from scipy import stats as st
@@ -9,7 +11,7 @@ class IDSRule:
 
     DUMMY_LABEL = "N/A"
     
-    def __init__(self, class_association_rule):
+    def __init__(self, class_association_rule: ClassAssocationRule):
         self.car = class_association_rule
         self.cover_cache = dict(
             cover=None,
@@ -18,14 +20,34 @@ class IDSRule:
             rule_cover=None
         )
         self.cache_prepared = False
-    
-    def calc_f1(self):
-        return st.hmean([self.car.support, self.car.confidence])
+        self.f1 = 0
+
+    def calc_f1(self, quant_dataframe: QuantitativeDataFrame):
+        ground_truth = quant_dataframe.dataframe.iloc[:, -1]
+        predictions = self.predict(quant_dataframe)
+
+        f1 = f1_score(ground_truth, predictions, average="micro")
+
+        return f1
+
+    def predict(self, quant_dataframe: QuantitativeDataFrame):
+        correct_cover_mask = self.correct_cover(quant_dataframe)
+
+        predictions = np.where(correct_cover_mask, self.car.consequent.value, "DUMMY_LABEL")
+
+        return predictions
 
     def __repr__(self):
-        f1 = self.calc_f1()
+        args = [
+            self.car.antecedent.string(),
+            "{" + self.car.consequent.string() + "}",
+            self.car.support,
+            self.car.confidence,
+            self.f1,
+            self.car.rulelen,
+            self.car.rid
+        ]
 
-        args = [self.car.antecedent.string(), "{" + self.car.consequent.string() + "}", self.car.support, self.car.confidence, f1, self.car.rulelen, self.car.rid]
         text = "IDSRule {} => {} sup: {:.2f} conf: {:.2f}, f1: {:.2f}, len: {}, id: {}".format(*args)
 
         return text
@@ -76,8 +98,6 @@ class IDSRule:
 
         return rule
 
-
-
     def to_xml(self):
         rule_dict = self.to_dict()
 
@@ -95,11 +115,9 @@ class IDSRule:
             label_element = ET.SubElement(consequent, label)
             label_element.text = value
 
-
         return rule
 
-
-    def calculate_cover(self, quant_dataframe):
+    def calculate_cover(self, quant_dataframe: QuantitativeDataFrame):
         if type(quant_dataframe) != QuantitativeDataFrame:
             raise Exception("Type of quant_dataframe must be QuantitativeDataFrame")
 
@@ -115,19 +133,19 @@ class IDSRule:
 
         self.cache_prepared = True
 
+        self.f1 = self.calc_f1(quant_dataframe)
+
     def cover(self, quant_dataframe):
         if not self.cache_prepared:
             raise Exception("Caches not prepared yet")
 
         return self.cover_cache["cover"]
 
-
     def correct_cover(self, quant_dataframe):
         if not self.cache_prepared:
             raise Exception("Caches not prepared yet")
 
         return self.cover_cache["correct_cover"]
-
 
     def incorrect_cover(self, quant_dataframe):
         if not self.cache_prepared:
@@ -141,7 +159,6 @@ class IDSRule:
 
         return self.cover_cache["rule_cover"]
 
-
     def _cover(self, quant_dataframe):
         if type(quant_dataframe) != QuantitativeDataFrame:
             raise Exception("Type of quant_dataframe must be QuantitativeDataFrame")
@@ -149,10 +166,6 @@ class IDSRule:
         cover, _ = quant_dataframe.find_covered_by_rule_mask(self.car)
 
         return cover
-
-    
-
-
 
     def rule_overlap(self, other, quant_dataframe):
         if type(quant_dataframe) != QuantitativeDataFrame:
@@ -168,8 +181,6 @@ class IDSRule:
 
         return overlap
 
-
-
     def predict(self, quant_dataframe):
         if type(quant_dataframe) != QuantitativeDataFrame:
             raise Exception("Type of quant_dataframe must be QuantitativeDataFrame")
@@ -181,7 +192,6 @@ class IDSRule:
         prediction = np.where(cover, class_label, IDSRule.DUMMY_LABEL)
 
         return prediction
-
 
     def _rule_cover(self, quant_dataframe):
         if type(quant_dataframe) != QuantitativeDataFrame:
@@ -203,9 +213,6 @@ class IDSRule:
 
         return np.logical_and(rule_cover, class_column_cover)
 
-
-
-        
     def _incorrect_cover(self, quant_dataframe):
         if type(quant_dataframe) != QuantitativeDataFrame:
             raise Exception("Type of quant_dataframe must be QuantitativeDataFrame")
@@ -214,7 +221,6 @@ class IDSRule:
 
         return np.logical_not(correct_cover)
 
-    
     def __gt__(self, other):
         """
         precedence operator. Determines if this rule
@@ -222,9 +228,8 @@ class IDSRule:
         to their f1 score.
         """
 
-        f1_score_self = self.calc_f1()
-        f1_score_other = other.calc_f1()
-
+        f1_score_self = self.f1
+        f1_score_other = other.f1
 
         return f1_score_self > f1_score_other
 

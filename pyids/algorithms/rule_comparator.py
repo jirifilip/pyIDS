@@ -1,39 +1,79 @@
-from abc import abstractmethod, ABC
+from ..data_structures.ids_rule import IDSRule
+
+from abc import ABC, abstractmethod
+from typing import List
+import numpy as np
+
+
+class IDSComparator:
+
+    def __init__(self):
+        self.comparators = dict(
+            f1=RuleComparatorF1,
+            cba=RuleComparatorCBA,
+            random=RuleComparatorRandom
+        )
+
+    def sort(self, rules: List[IDSRule], order_type: str = "f1"):
+
+        comparator = self.comparators[order_type](rules)
+        sorted_rules = comparator.sort()
+
+        return sorted_rules
+
 
 class RuleComparator(ABC):
 
+    def __init__(self, rules: List[IDSRule]):
+        self.rules = rules
+
+    def sort(self):
+        sorted_rules = sorted(
+            self.rules,
+            key=lambda rule: self.order(rule),
+            reverse=True
+        )
+
+        return sorted_rules
+
     @abstractmethod
-    def greater_than(self, rule1, rule2):
+    def order(self, rule: IDSRule):
         pass
 
-    @abstractmethod
-    def lesser_than(self, rule1, rule2):
-        pass
+
+class RuleComparatorF1(RuleComparator):
+
+    def order(self, rule: IDSRule):
+        f1_score = rule.f1
+
+        return f1_score
 
 
-class RuleComparatorF1(ABC):
+class RuleComparatorCBA(RuleComparator):
 
-    @abstractmethod
-    def greater_than(self, rule1, rule2):
+    def order(self, rule: IDSRule):
         """
         precedence operator. Determines if this rule
         has higher precedence. Rules are sorted according
-        to their f1 score.
+        to their confidence, support and length.
         """
 
-        f1_score_self = rule1.calc_f1()
-        f1_score_other = rule2.calc_f1()
+        return (
+            rule.car.confidence,
+            rule.car.support,
+            rule.car.rulelen
+        )
 
 
-        return f1_score_self > f1_score_other
+class RuleComparatorRandom(RuleComparator):
 
-    @abstractmethod
-    def lesser_than(self, rule1, rule2):
+    def order(self, rule: IDSRule):
         """
-        rule precedence operator
+        precedence operator. Determines if this rule
+        has higher precedence. Rules are sorted randomly.
         """
-        return not rule1 > rule2
+
+        return np.random.random() <= 0.5
 
 
-class RuleComparatorCBA():
-    pass
+
