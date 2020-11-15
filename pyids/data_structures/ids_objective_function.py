@@ -8,9 +8,7 @@ class ObjectiveFunctionParameters():
     
     def __init__(self):
 
-        self.params = dict(
-            lambda_array = 7*[1],
-        )
+        self.params = dict()
 
 
 
@@ -20,9 +18,11 @@ class IDSObjectiveFunction:
         self.objective_func_params = objective_func_params
         self.scale_factor = scale_factor
 
-
         all_rules = self.objective_func_params.params["all_rules"]
         quant_dataframe = self.objective_func_params.params["quant_dataframe"]
+
+        all_rules_lengths = [ len(rule) for rule in all_rules.ruleset ]
+        self.L_max = max(all_rules_lengths)
 
         if not cacher:
             self.cacher = IDSCacher()
@@ -40,7 +40,7 @@ class IDSObjectiveFunction:
         return f0
     
     def f1(self, solution_set):
-        L_max = solution_set.max_rule_length()
+        L_max = self.L_max
         len_all_rules = self.objective_func_params.params["len_all_rules"]
 
         f1 = L_max * len_all_rules - solution_set.sum_rule_length()
@@ -75,7 +75,6 @@ class IDSObjectiveFunction:
     def f3(self, solution_set) :
         overlap_interclass_sum = 0
 
-        n = len(solution_set)
         quant_dataframe = self.objective_func_params.params["quant_dataframe"]
         len_all_rules = self.objective_func_params.params["len_all_rules"]
 
@@ -137,20 +136,19 @@ class IDSObjectiveFunction:
 
         l = self.objective_func_params.params["lambda_array"]
 
-        f0 = self.f0(solution_set)
-        f1 = self.f1(solution_set)
-        f2 = self.f2(solution_set)
-        f3 = self.f3(solution_set)
-        f4 = self.f4(solution_set)
-        f5 = self.f5(solution_set)
-        f6 = self.f6(solution_set)
+        f0 = self.f0(solution_set) if l[0] != 0 else 0
+        f1 = self.f1(solution_set) if l[1] != 0 else 0
+        f2 = self.f2(solution_set) if l[2] != 0 else 0
+        f3 = self.f3(solution_set) if l[3] != 0 else 0
+        f4 = self.f4(solution_set) if l[4] != 0 else 0
+        f5 = self.f5(solution_set) if l[5] != 0 else 0
+        f6 = self.f6(solution_set) if l[6] != 0 else 0
 
         fs = np.array([
             f0, f1, f2, f3, f4, f5, f6
         ])/self.scale_factor
 
         result = np.dot(l, fs)
-
 
         return result
 

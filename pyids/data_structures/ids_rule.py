@@ -24,7 +24,11 @@ class IDSRule:
 
     def __repr__(self):
         f1 = self.calc_f1()
-        return "IDS-" + repr(self.car) + " f1: {}".format(f1)
+
+        args = [self.car.antecedent.string(), "{" + self.car.consequent.string() + "}", self.car.support, self.car.confidence, f1, self.car.rulelen, self.car.rid]
+        text = "CAR {} => {} sup: {:.2f} conf: {:.2f}, f1: {:.2f}, len: {}, id: {}".format(*args)
+
+        return text
 
     def __len__(self):
         return len(self.car.antecedent)
@@ -206,11 +210,9 @@ class IDSRule:
         if type(quant_dataframe) != QuantitativeDataFrame:
             raise Exception("Type of quant_dataframe must be QuantitativeDataFrame")
 
-        rule_cover = self._rule_cover(quant_dataframe)
+        correct_cover = self._correct_cover(quant_dataframe)
 
-        class_column_cover = quant_dataframe.dataframe.iloc[:,-1].values != self.car.consequent.value
-
-        return np.logical_and(rule_cover, class_column_cover)
+        return np.logical_not(correct_cover)
 
     
     def __gt__(self, other):
