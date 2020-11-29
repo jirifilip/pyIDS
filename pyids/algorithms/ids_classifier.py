@@ -21,7 +21,7 @@ class IDSClassifier:
         self.default_class_confidence = None
         self.quant_dataframe_train = None
 
-        self.logger = logging.Logger(IDSClassifier.__name__)
+        self.logger = logging.getLogger(IDSClassifier.__name__)
 
     def calculate_default_class(self):
         predicted_classes = self.predict(self.quant_dataframe_train)

@@ -11,13 +11,14 @@ class DeterministicUSMOptimizer:
             self,
             objective_function: IDSObjectiveFunction,
             objective_func_params: ObjectiveFunctionParameters,
+            optimizer_args=dict(),
             random_seed=None
         ):
 
         self.objective_function_params = objective_func_params
         self.objective_function = objective_function
 
-        self.logger = logging.Logger(DeterministicUSMOptimizer.__name__)
+        self.logger = logging.getLogger(DeterministicUSMOptimizer.__name__)
 
     def optimize(self):
         all_rules = self.objective_function_params.params["all_rules"]

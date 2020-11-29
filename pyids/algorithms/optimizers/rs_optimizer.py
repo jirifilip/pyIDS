@@ -6,7 +6,7 @@ from pyids.data_structures.ids_ruleset import IDSRuleSet
 
 class RSOptimizer:
     
-    def __init__(self, input_set, probability=0.5, random_seed=None):
+    def __init__(self, input_set, probability=0.5, optimizer_args = dict(), random_seed=None):
 
         self.input_set = input_set
         self.solution_set = set()

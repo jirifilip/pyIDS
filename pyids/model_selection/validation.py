@@ -9,12 +9,11 @@ import numpy as np
 
 class KFoldCV:
 
-    def __init__(self, classifier, folds_pandas_dataframes, debug=False, score_auc=False):
+    def __init__(self, classifier, folds_pandas_dataframes, score_auc=False):
         self.folds = folds_pandas_dataframes
         self.num_folds = len(self.folds)
         self.classifier = classifier
 
-        self.debug = debug
         self.score_auc = score_auc
 
         self.classifiers = []

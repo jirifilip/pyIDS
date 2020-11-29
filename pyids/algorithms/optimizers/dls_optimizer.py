@@ -5,11 +5,11 @@ import logging
 
 class DLSOptimizer:
 
-    def __init__(self, objective_function, objective_func_params, random_seed=None):
+    def __init__(self, objective_function, objective_func_params, optimizer_args=dict(), random_seed=None):
         self.objective_function_params = objective_func_params
         self.objective_function = objective_function
 
-        self.logger = logging.Logger(DLSOptimizer.__name__)
+        self.logger = logging.getLogger(DLSOptimizer.__name__)
 
     def find_best_element(self):
         all_rules = self.objective_function_params.params["all_rules"]

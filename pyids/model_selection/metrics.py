@@ -63,9 +63,11 @@ def average_rule_width(ids_model):
 
     for rule in ruleset.ruleset:
         rule_widths.append(len(rule))
-    
 
-    avg_rule_width = np.mean(rule_widths)
+    if rule_widths:
+        avg_rule_width = np.mean(rule_widths)
+    else:
+        avg_rule_width = 0
 
     return avg_rule_width
 

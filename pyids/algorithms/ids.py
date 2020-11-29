@@ -33,7 +33,7 @@ class IDS:
         )
 
         self.algorithm = algorithm
-        self.logger = logging.Logger(IDS.__name__)
+        self.logger = logging.getLogger(IDS.__name__)
 
     def fit(
             self,
@@ -41,6 +41,7 @@ class IDS:
             class_association_rules=None,
             lambda_array=7*[1],
             default_class="majority_class_in_uncovered",
+            optimizer_args=dict(),
             random_seed=None
     ):
         if type(quant_dataframe) != QuantitativeDataFrame:
@@ -63,7 +64,12 @@ class IDS:
         # objective function
         objective_function = IDSObjectiveFunction(objective_func_params=params, cacher=self.cacher)
 
-        optimizer = self.algorithms[self.algorithm](objective_function, params, random_seed=random_seed)
+        optimizer = self.algorithms[self.algorithm](
+            objective_function,
+            params,
+            random_seed=random_seed,
+            optimizer_args=optimizer_args
+        )
 
         solution_set = optimizer.optimize()
 
@@ -93,8 +99,9 @@ class IDS:
 
     def score(self, quant_dataframe, order_type="f1", metric=accuracy_score):
         pred = self.predict(quant_dataframe, order_type=order_type)
-        actual = quant_dataframe.dataframe.iloc[:,-1].values
-        return metric(pred, actual)
+        actual = quant_dataframe.dataframe.iloc[:, -1].values
+
+        return metric(actual, pred)
 
     def _calculate_auc_for_ruleconf(self, quant_dataframe, order_type):
         if type(quant_dataframe) != QuantitativeDataFrame:
@@ -120,11 +127,28 @@ class IDS:
 
         return roc_auc_score(actual, pred)
 
-    def score_auc(self, quant_dataframe, confidence_based=False, order_type="f1"):
-        if confidence_based:
-            return self._calculate_auc_for_ruleconf(quant_dataframe, order_type="f1")
-        else:
-            return self._calcutate_auc_classical(quant_dataframe, order_type="f1")
+    def score_auc(self, quant_dataframe: QuantitativeDataFrame, order_type="f1"):
+        actual_classes = quant_dataframe.dataframe.iloc[:, -1].values
+        predicted_classes = np.array(self.predict(quant_dataframe, order_type=order_type))
+        predicted_probabilities = np.array(self.clf.predict_proba(quant_dataframe=quant_dataframe, order_type=order_type))
+
+        distinct_classes = set(actual_classes)
+
+        AUCs = []
+
+        ones = np.ones_like(predicted_classes, dtype=int)
+        zeroes = np.zeros_like(predicted_classes, dtype=int)
+
+        for distinct_class in distinct_classes:
+            class_predicted_probabilities = np.where(predicted_classes == distinct_class, predicted_probabilities, ones - predicted_probabilities)
+            class_actual_probabilities = np.where(actual_classes == distinct_class, ones, zeroes)
+
+            auc = roc_auc_score(class_actual_probabilities, class_predicted_probabilities, average="micro")
+            AUCs.append(auc)
+
+        auc_score = np.mean(AUCs)
+
+        return auc_score
 
     def score_interpretability_metrics(self, quant_dataframe):
         stats = calculate_ruleset_statistics(self, quant_dataframe)

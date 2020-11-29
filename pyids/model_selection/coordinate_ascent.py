@@ -1,17 +1,13 @@
-import numpy as np
-
-from ..data_structures.ids_cacher import IDSCacher
-from typing import Tuple, Dict
-
-
+from .param_space_optimizer import ParameterSpaceOptimizer
+from typing import Tuple, Dict, List
+import pandas as pd
 
 def _ternary_search(func, left, right, absolute_precision, debug=False):
     """
-    taken from wikipedia article from ternary search
+    taken from wikipedia article on ternary search
     """
     
     while True:
-        #left and right are the current bounds; the maximum is between them
         if abs(right - left) < absolute_precision:
             return (left + right)/2
 
@@ -27,142 +23,111 @@ def _ternary_search(func, left, right, absolute_precision, debug=False):
             right = right_third
 
 
-class CoordinateAscentOptimizer:
-    
-    def __init__(self,
-                 classifier,
-                 params_len=7,
-                 param_lower_bound=1, 
-                 param_upper_bound=1000, 
-                 maximum_delta_between_iterations=1000, 
-                 maximum_consecutive_iterations=10, 
-                 maximum_upper_bound_extension_iterations=5, 
-                 maximum_score_estimation_iterations=1, 
-                 score_estimation_function=max,
-                 upper_bound_extension_precision=50,
-                 ternary_search_precision=100):
+class CoordinateAscent(ParameterSpaceOptimizer):
 
-        self.ranges = 1, 1000
+    def __init__(
+            self,
+            func,
+            func_args_ranges: Dict[str, Tuple[int, int]],
+            func_args_extension: Dict[str, int] = None,
+            extension_precision=50,
+            ternary_search_precision=10,
+            max_iterations=500,
+    ):
+        self.func = func
+        self.func_args_ranges = func_args_ranges
 
-        self.classifier = classifier
-        self.classifier_cache = IDSCacher()
+        arg_names = list(self.func_args_ranges.keys())
 
-        self.params_len = params_len
-
-
-        # maximum delta of parameters between iterations
-        self.maximum_delta_between_iterations = maximum_delta_between_iterations
-        self.maximum_consecutive_interations = maximum_consecutive_iterations
-        self.maximum_upper_bound_extension_iterations = maximum_upper_bound_extension_iterations
-        self.maximum_score_estimation_iterations = maximum_score_estimation_iterations
-        self.score_estimation_function = score_estimation_function        
-
-        self.upper_bound_extension_precision = upper_bound_extension_precision
-        self.UPPER_BOUND_EXTENSION_NUM = 500
-
-        self.ternary_search_precision = ternary_search_precision
-
-        self.current_best_params = np.array(params_len * [param_lower_bound])
-
-        self.classifier_params_ranges = []
-        for _ in range(params_len):
-            self.classifier_params_ranges.append(self.ranges)
-        self.classifier_params_ranges = np.array(self.classifier_params_ranges)
-
-        self._debug(self.classifier_params_ranges)
-
-    def _debug(self, value, description=""):
-        if description:
-            print(description, value)
+        if func_args_extension:
+            self.func_args_extension = func_args_extension
         else:
-            print(value)
-        
+            extensions_values = len(arg_names) * [500]
 
-    def _prepare(self, ids_ruleset, quant_dataframe):
-        self.classifier_cache.calculate_overlap(ids_ruleset, quant_dataframe)
+            self.func_args_extension = dict(zip(arg_names, extensions_values))
 
-        self.classifier.cache = self.classifier_cache
-        self.classifier.ids_ruleset = ids_ruleset
+        self.ternary_search_precision = dict(zip(arg_names, len(arg_names) * [ternary_search_precision]))
 
-    def estimate_classifier_score(self, lambda_array, quant_dataframe_train, quant_dataframe_test):
-        self._debug("estimating score")
-        
-        estimates = []
+        self.extension_precision = extension_precision
 
-        for i in range(self.maximum_score_estimation_iterations):
-            self._debug(i, "score estimation iteration:")
-            
-            self.classifier.fit(quant_dataframe_train, lambda_array=lambda_array)
-            score = self.classifier.score_auc(quant_dataframe_test)
+        self.max_iterations = max_iterations
 
-            self._debug(score, "iteration {} score:".format(i))
+        self.procedure_data = []
 
-            estimates.append(score)
+    def make_1arg_func(self, variable_arg_name, fixed_params):
+        def func(x):
+            fixed_params_copy = fixed_params.copy()
+
+            fixed_params_copy[variable_arg_name] = x
+
+            return self.func(fixed_params_copy)
+
+        return func
+
+    def extend_interval(self, arg_name, current_value):
+        lower_interval_value, upper_interval_value = self.func_args_ranges[arg_name]
+
+        if abs(upper_interval_value - current_value) <= self.extension_precision:
+            new_upper_interval_value = upper_interval_value + self.func_args_extension[arg_name]
+
+            self.func_args_ranges[arg_name] = lower_interval_value, new_upper_interval_value
+
+    def fit(self):
+        current_params = self.sample_starting_params()
+
+        current_procedure_data = dict()
+        current_procedure_data.update(dict(
+            iteration=-1,
+            current_lambda_param="None",
+            loss=self.func(current_params),
+            current_params=current_params.copy()
+        ))
+
+        self.procedure_data.append(current_procedure_data)
+
+        for i in range(self.max_iterations):
+            for arg_name in self.func_args_ranges.keys():
+                arg_func = self.make_1arg_func(arg_name, current_params)
+
+                print(f"using precision {self.ternary_search_precision[arg_name]}")
+
+                interval_lower, interval_upper = self.func_args_ranges[arg_name]
+                best_param = _ternary_search(
+                    arg_func,
+                    interval_lower,
+                    interval_upper,
+                    self.ternary_search_precision[arg_name]
+                )
+
+                self.extend_interval(arg_name, best_param)
+
+                _, interval_upper_new = self.func_args_ranges[arg_name]
+
+                if interval_upper == interval_upper_new:
+                    self.ternary_search_precision[arg_name] /= 2
+
+                current_params[arg_name] = best_param
+
+                current_procedure_data = dict()
+                current_procedure_data.update(dict(
+                    iteration=i,
+                    current_lambda_param=arg_name,
+                    loss=self.func(current_params),
+                    current_params=current_params.copy()
+                ))
+
+                self.procedure_data.append(current_procedure_data)
+
+        procedure_data_df = pd.DataFrame(self.procedure_data)
+        best_loss_mask = procedure_data_df["loss"] == procedure_data_df["loss"].max()
+        best_lambda_index = procedure_data_df[best_loss_mask].index[0]
+
+        best_lambda = list(self.procedure_data[best_lambda_index]["current_params"].values())
+
+        return best_lambda
 
 
-        final_score = self.score_estimation_function(estimates)
-        self._debug(final_score, "score:")
 
-        return final_score
-
-    def extend_search_interval(self, current_best_param_index, upper_bound, function_to_optimize):
-        consecutive_iterations = 0
-
-        while abs(self.current_best_params[current_best_param_index] - upper_bound) <= self.upper_bound_extension_precision and consecutive_iterations <= self.maximum_upper_bound_extension_iterations:
-            consecutive_iterations += 1
-
-            upper_bound += self.UPPER_BOUND_EXTENSION_NUM
-            previous_best_param = self.current_best_params[current_best_param_index]
-
-            _ternary_search(function_to_optimize, previous_best_param, upper_bound, self.ternary_search_precision)
-
-
-
-
-    def fit(self, ids_ruleset, quant_dataframe_train, quant_dataframe_test):
-        #
-        # add type checking
-        #
-
-        self._prepare(ids_ruleset, quant_dataframe_train)
-
-        # to compare delta between iteration
-        current_best_params_previous_iteration = self.current_best_params
-
-        # to ensure the loop will not stop at first cycle
-        current_delta_between_iterations = np.array([self.maximum_delta_between_iterations] * self.params_len) + self.current_best_params  
-        consecutive_iterations = 0
-
-        while (np.abs(current_delta_between_iterations - self.current_best_params) >= self.maximum_delta_between_iterations).any() and consecutive_iterations <= self.maximum_consecutive_interations:
-            consecutive_iterations += 1
-            self._debug(consecutive_iterations, "consecutive iterations")
-            
-            for idx, param_range in enumerate(self.classifier_params_ranges):
-
-                def function_to_optimize(param, clf=self.classifier, quant_dataframe_train=quant_dataframe_train, quant_dataframe_test=quant_dataframe_test, current_best_params=self.current_best_params):
-                    current_best_params[idx] = param
-
-                    self._debug(idx, "idx")
-                    self._debug(current_best_params)
-                    
-                    score = self.estimate_classifier_score(current_best_params, quant_dataframe_train, quant_dataframe_test)
-
-                    return score
-
-                
-                _ternary_search(function_to_optimize, param_range[0], param_range[1], self.ternary_search_precision)
-
-                self.extend_search_interval(idx, param_range[1], function_to_optimize)
-
-
-
-            current_delta_between_iterations = np.abs(current_best_params_previous_iteration - self.current_best_params)
-            current_best_params_previous_iteration = self.current_best_params
-
-
-
-        return self.current_best_params
-        
 
 
 

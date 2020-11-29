@@ -21,7 +21,7 @@ class IDSOneVsAll:
         self.class_name = None
         self.other_class_label = "OTHER"
 
-        self.logger = logging.Logger(IDSOneVsAll.__name__)
+        self.logger = logging.getLogger(IDSOneVsAll.__name__)
 
     def _prepare(self, quant_dataframe: QuantitativeDataFrame, class_name: str):
         if type(quant_dataframe) != QuantitativeDataFrame:

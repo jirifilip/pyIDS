@@ -1,6 +1,7 @@
 import pandas as pd
 import numpy as np
-from pyids.data_structures import IDS, mine_CARs, IDSRuleSet
+from pyids.algorithms.ids import IDS
+from pyids.algorithms import mine_CARs
 
 from pyarc.qcba.data_structures import QuantitativeDataFrame
 
@@ -8,19 +9,14 @@ import random
 import time
 
 
-df = pd.read_csv("./data/titanic.csv")
+df = pd.read_csv("./data/iris0.csv")
 cars = mine_CARs(df, 15, sample=False)
-ids_ruleset = IDSRuleSet.from_cba_rules(cars).ruleset
 
 quant_dataframe = QuantitativeDataFrame(df)
 
-for r in reversed(sorted(cars)):
-    print(r)
-
-
 start = time.time()
 ids = IDS(algorithm="RUSM")
-ids.fit(class_association_rules=cars, quant_dataframe=quant_dataframe, debug=False, random_seed=None, lambda_array=[1, 1, 1, 1, 1, 1, 1])
+ids.fit(class_association_rules=cars, quant_dataframe=quant_dataframe, random_seed=None, lambda_array=[1, 1, 1, 1, 1, 1, 1000000000])
 end = time.time()
 
 print(end - start)

@@ -6,7 +6,7 @@ import logging
 
 class RandomizedUSMOptimizer:
 
-    def __init__(self, objective_function, objective_func_params, random_seed=None):
+    def __init__(self, objective_function, objective_func_params, optimizer_args = dict(), random_seed=None):
         self.objective_function_params = objective_func_params
         self.objective_function = objective_function
         self.logger = logging.getLogger(RandomizedUSMOptimizer.__name__)

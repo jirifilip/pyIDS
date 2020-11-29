@@ -7,14 +7,15 @@ import logging
 
 class SLSOptimizer:
 
-    def __init__(self, objective_function, objective_func_params, random_seed=None):
+    def __init__(self, objective_function, objective_func_params, optimizer_args=dict(), random_seed=None):
         self.delta = 0.33
         self.objective_function_params = objective_func_params
         self.objective_function = objective_function
         self.rs_optimizer = RSOptimizer(self.objective_function_params.params["all_rules"].ruleset,
                                         random_seed=random_seed)
 
-        self.logger = logging.Logger(SLSOptimizer.__name__)
+        self.logger = logging.getLogger(SLSOptimizer.__name__)
+        self.max_omega_iterations = optimizer_args.get("max_omega_iterations", 10000)
 
         if random_seed:
             np.random.seed(random_seed)
@@ -28,9 +29,19 @@ class SLSOptimizer:
         exp_include_func_vals = []
         exp_exclude_func_vals = []
 
+        omega_estimation_extensions = 0
+        omega_estimation_iterations = 10
+
+        last_standard_error = 0
+        current_standard_error = 0
+        idx = 0
+        improvement_rate = 1
+
+        iteration_step_dict = dict()
+
         while True:
 
-            for _ in range(10):
+            for _ in range(omega_estimation_iterations):
                 temp_soln_set = self.sample_random_set(solution_set.ruleset, delta)
                 temp_soln_set.add(rule)
 
@@ -38,7 +49,7 @@ class SLSOptimizer:
 
                 exp_include_func_vals.append(func_val)
 
-            for _ in range(10):
+            for _ in range(omega_estimation_iterations):
                 temp_soln_set = self.sample_random_set(solution_set.ruleset, delta)
                 if rule in temp_soln_set:
                     temp_soln_set.remove(rule)
@@ -55,7 +66,36 @@ class SLSOptimizer:
             self.logger.debug("INFO - stardard error of omega estimate: {}".format(standard_error))
 
             if standard_error > error_threshold:
+                if idx == 0:
+                    last_standard_error = standard_error
+                    idx += 1
+                    continue
+
+                current_standard_error = standard_error
+                current_step = last_standard_error - current_standard_error
+                remaining_step = current_standard_error - error_threshold
+
+                improvement_rate = current_step / last_standard_error
+                if improvement_rate == 0:
+                    improvement_rate = 1
+
+                iteration_step_dict[omega_estimation_iterations] = current_step
+
+                if not remaining_step <= current_step:
+                    omega_estimation_iterations = round(omega_estimation_iterations / improvement_rate) + 1
+
+                if omega_estimation_iterations > self.max_omega_iterations:
+                    omega_estimation_iterations = self.max_omega_iterations
+
+                self.logger.debug(
+                    f"INFO - current_standard_error: {current_standard_error},"
+                    f" last_standard_error: {last_standard_error},"
+                    f" improvement_rate: {improvement_rate}, "
+                    f" omega_estimation_iterations: {omega_estimation_iterations}"
+                )
                 self.logger.debug("INFO - {} > {} => omega estimation continues".format(standard_error, error_threshold))
+
+                last_standard_error = current_standard_error
 
             if standard_error <= error_threshold:
                 self.logger.debug("INFO - omega succesfully estimated")
@@ -79,16 +119,15 @@ class SLSOptimizer:
         restart_omega_computations = False
 
         while True:
-            omega_estimates = []
+            omega_estimates = {}
             for rule in all_rules.ruleset:
-
-                if rule in soln_set.ruleset:
-                    continue
-
                 self.logger.debug("INFO - Estimating omega for rule: {}".format(rule))
 
                 omega_est = self.estimate_omega(rule, soln_set, 1.0 / (n * n) * OPT, delta)
-                omega_estimates.append(omega_est)
+                omega_estimates[rule] = omega_est
+
+                if rule in soln_set.ruleset:
+                    continue
 
                 if omega_est > 2.0 / (n * n) * OPT:
                     # add this element to solution set and recompute omegas
@@ -104,7 +143,7 @@ class SLSOptimizer:
                 continue
 
             for rule_idx, rule in enumerate(soln_set.ruleset):
-                if omega_estimates[rule_idx] < -2.0 / (n * n) * OPT:
+                if omega_estimates[rule] < -2.0 / (n * n) * OPT:
                     soln_set.ruleset.remove(rule)
                     restart_omega_computations = True
 
