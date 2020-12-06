@@ -1,0 +1,4 @@
+,algorithm,auc,average_rule_width,dataset_name,fraction_classes,fraction_overlap,fraction_uncovered,rule_cutoff,ruleset_length
+0,pyARC,0.9666666666666668,1.3333333333333333,iris,1.0,0.04444444444444444,0.4,20,3
+1,pyARC,0.5,0.0,iris,0.3333333333333333,0.0,1.0,20,0
+2,pyARC,1.0,1.3333333333333333,iris,1.0,0.0,0.1333333333333333,20,3

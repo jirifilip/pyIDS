@@ -1,0 +1,11 @@
+,algorithm,auc,average_rule_width,dataset_name,fraction_classes,fraction_overlap,fraction_uncovered,rule_cutoff,ruleset_length
+0,pyARC,0.5,0.0,anneal,0.2,0.0,1.0,20,0
+1,pyARC,0.5,0.0,anneal,0.25,0.0,1.0,20,0
+2,pyARC,0.5,0.0,anneal,0.2,0.0,1.0,20,0
+3,pyARC,0.6806428382386832,2.0,anneal,0.4,0.30402930402930406,0.0219780219780219,20,4
+4,pyARC,0.6095725570826123,2.0,anneal,0.2,0.0,0.6888888888888889,20,1
+5,pyARC,0.5,0.0,anneal,0.2,0.0,1.0,20,0
+6,pyARC,0.5,0.0,anneal,0.2,0.0,1.0,20,0
+7,pyARC,0.6964690801383291,2.0,anneal,0.2,0.0,0.4269662921348315,20,1
+8,pyARC,0.5314750290360046,2.0,anneal,0.5,0.0,0.022727272727272707,20,1
+9,pyARC,0.6825789160987026,2.0,anneal,0.2,0.0,0.6704545454545454,20,1
