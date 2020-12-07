@@ -23,7 +23,8 @@ training a simple IDS model
 
 ```python
 import pandas as pd
-from pyids.algorithms.ids_classifier import IDS, mine_CARs
+from pyids.algorithms.ids_classifier import mine_CARs
+from pyids.algorithms.ids import IDS
 
 from pyarc.qcba.data_structures import QuantitativeDataFrame
 
@@ -34,99 +35,56 @@ lambda_array = [1, 1, 1, 1, 1, 1, 1]
 
 quant_dataframe = QuantitativeDataFrame(df)
 
-ids = IDS()
-ids.fit(quant_dataframe=quant_dataframe, class_association_rules=cars, lambda_array=lambda_array, debug=False)
+ids = IDS(algorithm="SLS")
+ids.fit(quant_dataframe=quant_dataframe, class_association_rules=cars, lambda_array=lambda_array)
 
 acc = ids.score(quant_dataframe)
-```
-
-training a One-vs-all IDS model
-
-```python
-import pandas as pd
-from pyids.algorithms.ids_classifier import IDSOneVsAll, mine_CARs
-
-from pyarc.qcba.data_structures import QuantitativeDataFrame
-
-
-df = pd.read_csv("./data/iris0.csv")
-
-quant_dataframe = QuantitativeDataFrame(df)
-
-ids = IDSOneVsAll()
-ids.fit(quant_dataframe=quant_dataframe, debug=False)
-
-acc = ids.score_auc(quant_dataframe)
 ```
 
 optimizing for best lambda parameters using coordinate ascent, as described in the original paper
 
 ```python
 import pandas as pd
-from pyids.algorithms.ids_classifier import IDS, mine_IDS_ruleset
-from pyids.model_selection import CoordinateAscentOptimizer, train_test_split_pd
+
+from pyids.data_structures import QuantitativeDataFrame
+
+from pyids.algorithms.ids_classifier import mine_CARs
+from pyids.algorithms.ids import IDS
+from pyids.model_selection.coordinate_ascent import CoordinateAscent
 
 from pyarc.qcba.data_structures import QuantitativeDataFrame
 
 
 df = pd.read_csv("./data/titanic.csv")
-df_train, df_test = train_test_split_pd(df, prop=0.2)
+quant_df = QuantitativeDataFrame(df)
+cars = mine_CARs(df, 20)
 
-ids_ruleset = mine_IDS_ruleset(df_train, rule_cutoff=50)
 
-quant_dataframe_train = QuantitativeDataFrame(df_train)
-quant_dataframe_test = QuantitativeDataFrame(df_test)
+def fmax(lambda_dict):
+    print(lambda_dict)
+    ids = IDS(algorithm="SLS")
+    ids.fit(class_association_rules=cars, quant_dataframe=quant_df, lambda_array=list(lambda_dict.values()))
+    auc = ids.score_auc(quant_df)
+    print(auc)
+    return auc
 
-coordinate_ascent = CoordinateAscentOptimizer(IDS(), debug=True, maximum_delta_between_iterations=200, maximum_score_estimation_iterations=3)
-coordinate_ascent.fit(ids_ruleset, quant_dataframe_train, quant_dataframe_test)
 
-best_lambda_array = coordinate_ascent.current_best_params
+
+coord_asc = CoordinateAscent(
+    func=fmax,
+    func_args_ranges=dict(
+        l1=(1, 1000),
+        l2=(1, 1000),
+        l3=(1, 1000),
+        l4=(1, 1000),
+        l5=(1, 1000),
+        l6=(1, 1000),
+        l7=(1, 1000)
+    ),
+    ternary_search_precision=50,
+    max_iterations=3
+)
+
+best_lambdas = coord_asc.fit()
 ```
 
-or optimizing a One-vs-all IDS model
-
-```python
-import pandas as pd
-from pyids.algorithms.ids_classifier import IDSOneVsAll, mine_IDS_ruleset
-from pyids.model_selection import CoordinateAscentOptimizer, train_test_split_pd
-
-from pyarc.qcba.data_structures import QuantitativeDataFrame
-
-
-df = pd.read_csv("./data/iris0.csv")
-df_train, df_test = train_test_split_pd(df, prop=0.2)
-
-ids_ruleset = mine_IDS_ruleset(df_train, rule_cutoff=50)
-
-quant_dataframe_train = QuantitativeDataFrame(df_train)
-quant_dataframe_test = QuantitativeDataFrame(df_test)
-
-coordinate_ascent = CoordinateAscentOptimizer(IDSOneVsAll(), debug=True, maximum_delta_between_iterations=200, maximum_score_estimation_iterations=3)
-coordinate_ascent.fit(ids_ruleset, quant_dataframe_train, quant_dataframe_test)
-
-best_lambda_array = coordinate_ascent.current_best_params
-```
-
-using k-fold cross validation with AUC score
-
-```python
-import pandas as pd
-from pyids.algorithms.ids_classifier import IDSOneVsAll
-
-dataframes = [ pd.read_csv("./data/iris{}.csv".format(i)) for i in range(10)]
-
-kfold = KFoldCV(IDSOneVsAll(), dataframes, score_auc=True)
-scores = kfold.fit(rule_cutoff=50)
-```
-
-using k-fold cross validation with accuracy score
-
-```python
-import pandas as pd
-from pyids.ids_classifier import IDS
-
-dataframes = [ pd.read_csv("./data/iris{}.csv".format(i)) for i in range(10)]
-
-kfold = KFoldCV(IDS(), dataframes)
-scores = kfold.fit(rule_cutoff=50)
-```
