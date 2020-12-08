@@ -46,8 +46,6 @@ optimizing for best lambda parameters using coordinate ascent, as described in t
 ```python
 import pandas as pd
 
-from pyids.data_structures import QuantitativeDataFrame
-
 from pyids.algorithms.ids_classifier import mine_CARs
 from pyids.algorithms.ids import IDS
 from pyids.model_selection.coordinate_ascent import CoordinateAscent
