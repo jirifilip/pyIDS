@@ -27,9 +27,12 @@ from pyids.algorithms.ids_classifier import mine_CARs
 from pyids.algorithms.ids import IDS
 
 from pyarc.qcba.data_structures import QuantitativeDataFrame
+import io
+import requests
 
-
-df = pd.read_csv("./data/iris0.csv")
+url = "https://raw.githubusercontent.com/kliegr/arcBench/master/data/folds_discr/train/iris0.csv"
+s = requests.get(url).content
+df = pd.read_csv(io.StringIO(s.decode('utf-8')))
 cars = mine_CARs(df, rule_cutoff=50)
 lambda_array = [1, 1, 1, 1, 1, 1, 1]
 
@@ -45,6 +48,8 @@ optimizing for best lambda parameters using coordinate ascent, as described in t
 
 ```python
 import pandas as pd
+import io
+import requests
 
 from pyids.algorithms.ids_classifier import mine_CARs
 from pyids.algorithms.ids import IDS
@@ -53,7 +58,9 @@ from pyids.model_selection.coordinate_ascent import CoordinateAscent
 from pyarc.qcba.data_structures import QuantitativeDataFrame
 
 
-df = pd.read_csv("./data/titanic.csv")
+url = "https://raw.githubusercontent.com/jirifilip/pyids/master/data/titanic.csv"
+s = requests.get(url).content
+df = pd.read_csv(io.StringIO(s.decode('utf-8')))
 quant_df = QuantitativeDataFrame(df)
 cars = mine_CARs(df, 20)
 
