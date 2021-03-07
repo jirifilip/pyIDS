@@ -1,8 +1,11 @@
 import numpy as np
+from typing import Iterable
 
+from pyarc.qcba.data_structures import QuantitativeDataFrame
 
 from pyids.data_structures.ids_ruleset import IDSRuleSet
 from pyids.data_structures.ids_cacher import IDSCacher
+from pyids.data_structures.ids_rule import IDSRule
 
 
 class ObjectiveFunctionParameters():
@@ -143,6 +146,35 @@ class IDSObjectiveFunction:
         result = np.dot(l, fs)
 
         return result
+
+
+class NormalizedObjectiveFunction(IDSObjectiveFunction):
+
+    def __init__(
+            self,
+            dataframe: QuantitativeDataFrame,
+            rules: Iterable[IDSRule],
+            cacher: IDSCacher
+    ):
+        self.dataframe = rules
+        self.rules = rules
+        self.cacher = cacher
+
+        self.__len_rules = len(rules)
+
+        self.maxable_objectives = [
+            self.f0,
+            self.f1,
+            self.f2,
+            self.f3,
+            self.f5
+        ]
+
+        self.minimizable_objectives = [
+            self.f4,
+            self.f6
+        ]
+
 
 
 

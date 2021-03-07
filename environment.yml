@@ -1,0 +1,47 @@
+name: pyIDS
+channels:
+  - defaults
+dependencies:
+  - _libgcc_mutex=0.1=main
+  - brotlipy=0.7.0=py38h27cfd23_1003
+  - ca-certificates=2021.1.19=h06a4308_0
+  - certifi=2020.12.5=py38h06a4308_0
+  - cffi=1.14.5=py38h261ae71_0
+  - chardet=4.0.0=py38h06a4308_1003
+  - cryptography=3.3.1=py38h3c74f83_1
+  - idna=2.10=pyhd3eb1b0_0
+  - ld_impl_linux-64=2.33.1=h53a641e_7
+  - libedit=3.1.20191231=h14c3975_1
+  - libffi=3.3=he6710b0_2
+  - libgcc-ng=9.1.0=hdf63c60_0
+  - libstdcxx-ng=9.1.0=hdf63c60_0
+  - ncurses=6.2=he6710b0_1
+  - openssl=1.1.1j=h27cfd23_0
+  - pip=21.0.1=py38h06a4308_0
+  - pycparser=2.20=py_2
+  - pyopenssl=20.0.1=pyhd3eb1b0_1
+  - pysocks=1.7.1=py38h06a4308_0
+  - python=3.8.8=hdb3f193_4
+  - readline=8.1=h27cfd23_0
+  - requests=2.25.1=pyhd3eb1b0_0
+  - setuptools=52.0.0=py38h06a4308_0
+  - six=1.15.0=py38h06a4308_0
+  - sqlite=3.33.0=h62c20be_0
+  - tk=8.6.10=hbc83047_0
+  - urllib3=1.26.3=pyhd3eb1b0_0
+  - wheel=0.36.2=pyhd3eb1b0_0
+  - xz=5.2.5=h7b6447c_0
+  - zlib=1.2.11=h7b6447c_3
+  - pip:
+    - joblib==1.0.1
+    - numpy==1.20.1
+    - pandas==1.2.3
+    - pyarc==1.1.4
+    - pyfim==6.28
+    - python-dateutil==2.8.1
+    - pytz==2021.1
+    - scikit-learn==0.24.1
+    - scipy==1.6.1
+    - sklearn==0.0
+    - threadpoolctl==2.1.0
+prefix: /home/jirifilip/programs/anaconda3/envs/pyIDS

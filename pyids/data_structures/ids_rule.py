@@ -84,7 +84,6 @@ class IDSRule:
         rel_element = ET.SubElement(label_element, "Rel")
         rel_element.text = rule_dict["consequent"]["value"]
 
-
         antecedent = ET.SubElement(rule, "body")
 
         for antecedent_member in rule_dict["antecedent"]:
