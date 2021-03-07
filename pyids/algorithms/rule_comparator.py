@@ -1,4 +1,4 @@
-from ..data_structures.ids_rule import IDSRule
+from ..data_structures.rule import IDSRule
 
 from abc import ABC, abstractmethod
 from typing import List

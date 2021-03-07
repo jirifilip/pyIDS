@@ -7,7 +7,7 @@ import numpy as np
 from pyarc.qcba.data_structures import QuantitativeDataFrame
 import time
 
-from pyids.algorithms.ids_classifier import mine_CARs
+from pyids.algorithms.classifier import mine_CARs
 from pyids.algorithms.ids import IDS
 from pyarc.data_structures import TransactionDB
 from pyarc.algorithms import M1Algorithm

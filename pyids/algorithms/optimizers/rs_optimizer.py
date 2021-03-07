@@ -2,7 +2,8 @@ import numpy as np
 import random
 import math
 
-from pyids.data_structures.ids_ruleset import IDSRuleSet
+from pyids.data_structures import IDSRuleSet
+
 
 class RSOptimizer:
     

@@ -1,4 +1,4 @@
-from ...data_structures.ids_ruleset import IDSRuleSet
+from ...data_structures import IDSRuleSet
 
 import numpy as np
 import logging

@@ -1,7 +1,7 @@
 from pyarc.qcba.data_structures import QuantitativeDataFrame
 from ..model_selection import calculate_metrics_average
 
-from .ids_classifier import mine_CARs
+from .classifier import mine_CARs
 from .ids import IDS
 
 import numpy as np

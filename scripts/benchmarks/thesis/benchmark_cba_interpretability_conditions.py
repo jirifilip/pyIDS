@@ -7,10 +7,10 @@ import numpy as np
 from pyarc.qcba.data_structures import QuantitativeDataFrame
 import time
 
-from pyids.algorithms.ids_classifier import mine_CARs
+from pyids.algorithms.classifier import mine_CARs
 from pyids.algorithms.ids import IDS
-from pyids.data_structures.ids_ruleset import IDSRuleSet
-from pyids.algorithms.ids_classifier import IDSClassifier
+from pyids.data_structures import IDSRuleSet
+from pyids.algorithms.classifier import IDSClassifier
 from pyids.algorithms.ids import IDS
 from pyarc.data_structures import TransactionDB
 from pyarc.algorithms import M1Algorithm

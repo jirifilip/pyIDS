@@ -1,5 +1,5 @@
-from ...data_structures.ids_ruleset import IDSRuleSet
-from ..ids_objective_function import IDSObjectiveFunction, ObjectiveFunctionParameters
+from ...data_structures import IDSRuleSet
+from ..objective_function import IDSObjectiveFunction, ObjectiveFunctionParameters
 
 import numpy as np
 import logging

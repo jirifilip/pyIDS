@@ -1,9 +1,9 @@
 from pyarc.qcba.data_structures import QuantitativeDataFrame
 
-from .ids_objective_function import IDSObjectiveFunction, ObjectiveFunctionParameters
+from .objective_function import IDSObjectiveFunction, ObjectiveFunctionParameters
 
-from ..data_structures.ids_rule import IDSRule
-from ..data_structures.ids_ruleset import IDSRuleSet
+from ..data_structures.rule import IDSRule
+from ..data_structures import IDSRuleSet
 
 from .optimizers.sls_optimizer import SLSOptimizer
 from .optimizers.dls_optimizer import DLSOptimizer
@@ -11,7 +11,7 @@ from .optimizers.dusm_optimizer import DeterministicUSMOptimizer
 from .optimizers.rusm_optimizer import RandomizedUSMOptimizer
 
 from ..model_selection import encode_label, calculate_ruleset_statistics, mode
-from ..algorithms.ids_classifier import IDSClassifier
+from ..algorithms.classifier import IDSClassifier
 
 from sklearn.metrics import accuracy_score, roc_auc_score
 
@@ -47,26 +47,24 @@ class IDS:
         if type(quant_dataframe) != QuantitativeDataFrame:
             raise Exception("Type of quant_dataframe must be QuantitativeDataFrame")
 
-        params = ObjectiveFunctionParameters()
-
         if not self.ids_ruleset:
             ids_rules = list(map(IDSRule, class_association_rules))
             all_rules = IDSRuleSet(ids_rules)
-            params.params["all_rules"] = all_rules
         elif self.ids_ruleset and not class_association_rules:
-            print("using provided ids ruleset and not class association rules")
-            params.params["all_rules"] = self.ids_ruleset
-
-        params.params["len_all_rules"] = len(params.params["all_rules"])
-        params.params["quant_dataframe"] = quant_dataframe
-        params.params["lambda_array"] = lambda_array
+            all_rules = self.ids_ruleset
 
         # objective function
-        objective_function = IDSObjectiveFunction(objective_func_params=params, cacher=self.cacher)
+        objective_function = IDSObjectiveFunction(
+            dataframe=quant_dataframe,
+            rules=all_rules,
+            lambda_array=lambda_array,
+            cacher=self.cacher
+        )
 
         optimizer = self.algorithms[self.algorithm](
             objective_function,
-            params,
+            quant_dataframe=quant_dataframe,
+            rules=all_rules,
             random_seed=random_seed,
             optimizer_args=optimizer_args
         )

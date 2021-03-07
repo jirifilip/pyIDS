@@ -23,7 +23,7 @@ training a simple IDS model
 
 ```python
 import pandas as pd
-from pyids.algorithms.ids_classifier import mine_CARs
+from pyids.algorithms.classifier import mine_CARs
 from pyids.algorithms.ids import IDS
 
 from pyarc.qcba.data_structures import QuantitativeDataFrame
@@ -51,12 +51,11 @@ import pandas as pd
 import io
 import requests
 
-from pyids.algorithms.ids_classifier import mine_CARs
+from pyids.algorithms.classifier import mine_CARs
 from pyids.algorithms.ids import IDS
 from pyids.model_selection.coordinate_ascent import CoordinateAscent
 
 from pyarc.qcba.data_structures import QuantitativeDataFrame
-
 
 url = "https://raw.githubusercontent.com/jirifilip/pyids/master/data/titanic.csv"
 s = requests.get(url).content
@@ -72,7 +71,6 @@ def fmax(lambda_dict):
     auc = ids.score_auc(quant_df)
     print(auc)
     return auc
-
 
 
 coord_asc = CoordinateAscent(

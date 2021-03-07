@@ -2,8 +2,8 @@ from pyarc.qcba.data_structures import QuantitativeDataFrame
 from pyarc.data_structures import TransactionDB
 from pyarc.algorithms import top_rules, createCARs
 
-from ..data_structures.ids_rule import IDSRule
-from ..data_structures.ids_ruleset import IDSRuleSet
+from ..data_structures.rule import IDSRule
+from ..data_structures import IDSRuleSet
 
 from ..algorithms.rule_comparator import IDSComparator
 from ..model_selection import mode

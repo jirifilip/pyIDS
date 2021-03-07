@@ -1,5 +1,5 @@
 from pyids.algorithms import mine_IDS_ruleset, mine_CARs
-from pyids.algorithms.ids_objective_function import (
+from pyids.algorithms.objective_function import (
     IDSObjectiveFunction,
     ObjectiveFunctionParameters
 )

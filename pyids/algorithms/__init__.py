@@ -1,1 +1,1 @@
-from .ids_classifier import mine_CARs, mine_IDS_ruleset
+from .classifier import mine_CARs, mine_IDS_ruleset

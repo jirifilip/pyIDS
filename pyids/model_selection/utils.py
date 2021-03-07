@@ -4,8 +4,8 @@ import random
 
 from pyarc.algorithms import top_rules, createCARs
 from pyarc.data_structures import TransactionDB
-from ..data_structures.ids_rule import IDSRule
-from ..data_structures.ids_ruleset import IDSRuleSet
+from ..data_structures.rule import IDSRule
+from ..data_structures import IDSRuleSet
 
 
 def encode_label(actual, predicted):

@@ -5,7 +5,7 @@ import logging
 
 from pyarc.qcba.data_structures import QuantitativeDataFrame
 
-from pyids.algorithms.ids_classifier import mine_CARs
+from pyids.algorithms.classifier import mine_CARs
 from pyids.algorithms.ids import IDS
 from pyids.algorithms.ids_multiclass import IDSOneVsAll
 

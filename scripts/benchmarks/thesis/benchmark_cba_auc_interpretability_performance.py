@@ -8,7 +8,7 @@ import pandas as pd
 import numpy as np
 
 from pyids.algorithms.ids import IDS
-from pyids.algorithms.ids_classifier import IDSClassifier
+from pyids.algorithms.classifier import IDSClassifier
 from pyids.data_structures import IDSRuleSet, IDSRule
 
 from pyids.algorithms import mine_CARs

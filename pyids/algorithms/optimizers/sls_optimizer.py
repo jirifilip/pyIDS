@@ -1,17 +1,34 @@
-from pyids.algorithms.optimizers.rs_optimizer import RSOptimizer
-from ...data_structures.ids_ruleset import IDSRuleSet
 import math
 import numpy as np
 import logging
+from typing import Iterable
+
+from pyarc.qcba.data_structures import QuantitativeDataFrame
+
+
+from .rs_optimizer import RSOptimizer
+from ...data_structures import IDSRuleSet
+from ...data_structures.rule import IDSRule
 
 
 class SLSOptimizer:
 
-    def __init__(self, objective_function, objective_func_params, optimizer_args=dict(), random_seed=None):
+    def __init__(
+            self,
+            objective_function,
+            dataframe: QuantitativeDataFrame,
+            rules: Iterable[IDSRule],
+            optimizer_args=dict(),
+            random_seed=None
+    ):
         self.delta = 0.33
-        self.objective_function_params = objective_func_params
+
         self.objective_function = objective_function
-        self.rs_optimizer = RSOptimizer(self.objective_function_params.params["all_rules"].ruleset,
+
+        self.rules = rules
+        self.dataframe = dataframe
+
+        self.rs_optimizer = RSOptimizer(rules.ruleset,
                                         random_seed=random_seed)
 
         self.logger = logging.getLogger(SLSOptimizer.__name__)
@@ -104,9 +121,8 @@ class SLSOptimizer:
         return np.mean(exp_include_func_vals) - np.mean(exp_exclude_func_vals)
 
     def optimize_delta(self, delta, delta_prime):
-        all_rules = self.objective_function_params.params["all_rules"]
         OPT = self.compute_OPT()
-        n = len(all_rules)
+        n = len(self.rules)
 
         self.logger.debug("INFO - Number of input rules: {}".format(n))
         self.logger.debug("INFO - RandomOptimizer estimated the OPTIMUM value as: {}".format(OPT))
@@ -120,7 +136,7 @@ class SLSOptimizer:
 
         while True:
             omega_estimates = {}
-            for rule in all_rules.ruleset:
+            for rule in self.rules.ruleset:
                 self.logger.debug("INFO - Estimating omega for rule: {}".format(rule))
 
                 omega_est = self.estimate_omega(rule, soln_set, 1.0 / (n * n) * OPT, delta)
@@ -159,7 +175,7 @@ class SLSOptimizer:
     def sample_random_set(self, soln_set, delta):
         # get params from cache
         return_set = set()
-        all_rules_set = self.objective_function_params.params["all_rules"].ruleset
+        all_rules_set = self.rules.ruleset
 
         p = (delta + 1.0) / 2
         for item in soln_set:

@@ -2,8 +2,7 @@ import pandas as pd
 
 from pyarc.qcba.data_structures import QuantitativeDataFrame
 
-from pyids.data_structures import IDS, mine_IDS_ruleset, mine_CARs
-from pyids.data_structures import IDSRuleSet
+from pyids.data_structures import IDS, mine_IDS_ruleset, mine_CARs, IDSRuleSet
 from pyids.rule_mining import RuleMiner
 from pyids.model_selection import CoordinateAscentOptimizer, train_test_split_pd
 

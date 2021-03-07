@@ -1,30 +1,42 @@
-from ...data_structures.ids_ruleset import IDSRuleSet
-
 import numpy as np
 import logging
+from typing import Iterable
+
+from pyarc.qcba.data_structures import QuantitativeDataFrame
+
+from ...data_structures import IDSRuleSet
+from ...data_structures.rule import IDSRule
+
+from ..objective_function import IDSObjectiveFunction
 
 
 class RandomizedUSMOptimizer:
 
-    def __init__(self, objective_function, objective_func_params, optimizer_args = dict(), random_seed=None):
-        self.objective_function_params = objective_func_params
+    def __init__(
+            self,
+            objective_function: IDSObjectiveFunction,
+            dataframe: QuantitativeDataFrame,
+            rules: Iterable[IDSRule],
+            optimizer_args=dict(),
+            random_seed=None
+    ):
         self.objective_function = objective_function
+        self.dataframe = dataframe
+        self.rules = rules
         self.logger = logging.getLogger(RandomizedUSMOptimizer.__name__)
 
         if random_seed:
             np.random.seed(random_seed)
 
     def optimize(self):
-        all_rules = self.objective_function_params.params["all_rules"]
-
         x0 = IDSRuleSet(set())
-        y0 = IDSRuleSet({rule for rule in all_rules.ruleset})
+        y0 = IDSRuleSet({rule for rule in self.rules.ruleset})
 
         n = len(y0)
 
         self.logger.debug(f"Total # of rules to evaluate: {n}")
 
-        for idx, rule in enumerate(all_rules.ruleset):
+        for idx, rule in enumerate(self.rules.ruleset):
             self.logger.debug(f"Enumerating rule #{idx}: {rule}")
 
             a_set = IDSRuleSet(x0.ruleset | {rule})
