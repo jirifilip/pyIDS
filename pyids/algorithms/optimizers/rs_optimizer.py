@@ -7,14 +7,11 @@ from pyids.data_structures import IDSRuleSet
 
 class RSOptimizer:
     
-    def __init__(self, input_set, probability=0.5, optimizer_args = dict(), random_seed=None):
+    def __init__(self, input_set, probability=0.5):
 
         self.input_set = input_set
         self.solution_set = set()
 
-        if random_seed:
-            np.random.seed(random_seed)
-        
         self.probability = probability
         
     def optimize(self):

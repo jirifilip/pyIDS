@@ -164,7 +164,7 @@ for data_size in data_size_quantiles:
         time1 = time.time()
         lambda_array = [1.0]*7     # use separate hyperparamter search routine
         ids = IDS()
-        ids.fit(class_association_rules=current_cars, quant_dataframe=current_quant_df, debug=False)
+        ids.fit(rules=current_cars, dataframe=current_quant_df, debug=False)
 
         time2 = time.time()
 

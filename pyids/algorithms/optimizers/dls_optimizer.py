@@ -5,8 +5,7 @@ import logging
 
 class DLSOptimizer:
 
-    def __init__(self, objective_function, objective_func_params, optimizer_args=dict(), random_seed=None):
-        self.objective_function_params = objective_func_params
+    def __init__(self, objective_function):
         self.objective_function = objective_function
 
         self.logger = logging.getLogger(DLSOptimizer.__name__)

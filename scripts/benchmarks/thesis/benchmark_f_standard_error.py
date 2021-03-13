@@ -43,8 +43,8 @@ for i in range(7):
         start = time.time()
         ids = IDS(algorithm="SLS")
         ids.fit(
-            class_association_rules=cars,
-            quant_dataframe=quant_dataframe,
+            rules=cars,
+            dataframe=quant_dataframe,
             random_seed=None,
             lambda_array=lambda_array,
             optimizer_args=(dict(
@@ -61,8 +61,8 @@ for i in range(7):
         start = time.time()
         ids = IDS(algorithm="SLS")
         ids.fit(
-            class_association_rules=cars,
-            quant_dataframe=quant_dataframe,
+            rules=cars,
+            dataframe=quant_dataframe,
             random_seed=None,
             lambda_array=lambda_array,
             optimizer_args=(dict(

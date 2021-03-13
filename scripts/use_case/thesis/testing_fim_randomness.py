@@ -43,7 +43,7 @@ ids_comparison_results = []
 
 for _ in range(replications_n):
     ids = IDS()
-    ids = ids.fit(quant_dataframe=quant_df, class_association_rules=cars, debug=False, random_seed=2)
+    ids = ids.fit(dataframe=quant_df, rules=cars, debug=False, random_seed=2)
     ids_models_multiple.append(ids.clf.rules)
 
 

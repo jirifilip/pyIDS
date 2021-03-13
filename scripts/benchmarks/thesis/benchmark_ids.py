@@ -38,7 +38,7 @@ for i in range(10, 110, 10):
             start_time = time.time()
 
             ids = IDS(algorithm=algorithm)
-            ids.fit(quant_dataframe=quant_df, class_association_rules=cars)
+            ids.fit(dataframe=quant_df, rules=cars)
 
             total_time = time.time() - start_time
             times.append(total_time)

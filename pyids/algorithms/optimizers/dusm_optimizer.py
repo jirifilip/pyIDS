@@ -1,5 +1,5 @@
 from ...data_structures import IDSRuleSet
-from ..objective_function import IDSObjectiveFunction, ObjectiveFunctionParameters
+from ..objective_function import IDSObjectiveFunction
 
 import numpy as np
 import logging
@@ -10,7 +10,6 @@ class DeterministicUSMOptimizer:
     def __init__(
             self,
             objective_function: IDSObjectiveFunction,
-            objective_func_params: ObjectiveFunctionParameters,
             optimizer_args=dict(),
             random_seed=None
         ):

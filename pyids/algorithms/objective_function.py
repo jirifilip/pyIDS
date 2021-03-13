@@ -1,5 +1,6 @@
 import numpy as np
 from typing import Iterable, List
+from abc import ABC, abstractmethod
 
 from pyarc.qcba.data_structures import QuantitativeDataFrame
 
@@ -8,14 +9,17 @@ from pyids.data_structures.cacher import IDSCacher
 from pyids.data_structures.rule import IDSRule
 
 
-class IDSObjectiveFunction:
+class ObjectiveFunction(ABC):
+    pass
+
+
+class IDSObjectiveFunction(ObjectiveFunction):
     
     def __init__(
         self,
         dataframe: QuantitativeDataFrame,
         rules: Iterable[IDSRule],
-        lambda_array: List[float],
-        cacher: IDSCacher
+        lambda_array: List[float] = 7 * [1],
     ):
         self.rules = rules
         self.dataframe = dataframe
@@ -26,12 +30,9 @@ class IDSObjectiveFunction:
         all_rules_lengths = [ len(rule) for rule in rules.ruleset ]
         self._L_max = max(all_rules_lengths)
 
-        if not cacher:
-            self.cacher = IDSCacher()
-            self.cacher.calculate_overlap(rules, dataframe)
-        else:
-            self.cacher = cacher
-    
+        self.cacher = IDSCacher()
+        self.cacher.calculate_overlap(rules, dataframe)
+
     def f0(self, solution_set: IDSRuleSet):
         f0 = self._len_rules - len(solution_set)
 
@@ -129,51 +130,7 @@ class IDSObjectiveFunction:
         return result
 
 
-class NormalizeObjectiveMixin(IDSObjectiveFunction):
-
-    def get_normalized_objective(self, objective_func):
-        empty_ruleset = IDSRuleSet(rules=set())
-        full_ruleset = self.rules
-
-        def normalized_objective_func(solution_set):
-            objective_max = objective_func(empty_ruleset)
-            objective_min = objective_func(full_ruleset)
-
-            objective_value = objective_func(solution_set)
-
-            normalized_objective = (objective_value - objective_min) / (objective_max - objective_min)
-
-            return normalized_objective
-
-        return normalized_objective_func
-
-
-    def normalize_objective(self, objective_func, solution_set: IDSRuleSet):
-        empty_ruleset = IDSRuleSet(rules=set())
-        full_ruleset = self.rules
-
-        objective_max = objective_func(empty_ruleset)
-        objective_min = objective_func(full_ruleset)
-
-        objective_value = objective_func(self, solution_set)
-
-        normalized_objective = (objective_value - objective_min) / (objective_max - objective_min)
-
-        return normalized_objective
-
-
-class NormalizedObjectiveFunction(IDSObjectiveFunction, NormalizeObjectiveMixin):
-
-    def evaluate(self, solution_set: IDSRuleSet):
-        if type(solution_set) != IDSRuleSet:
-            raise Exception(f"Type of solution_set must by f{IDSRuleSet.__name__}")
-
-        f0 = self.normalize_objective(self.f0)
-        f1 = self.normalize_objective(self.f1)
-        f2 = self.normalize_objective(self.f2)
-
-
-class NormalizedF1ObjectiveFunction(IDSObjectiveFunction, NormalizeObjectiveMixin):
+class NormalizedF1ObjectiveFunction(IDSObjectiveFunction):
 
     def __init__(self, *args, precision_weight=1, recall_weight=1, **kwargs):
         self.precision_weight = precision_weight
@@ -182,7 +139,23 @@ class NormalizedF1ObjectiveFunction(IDSObjectiveFunction, NormalizeObjectiveMixi
         self.normalized_precision_func = self.get_normalized_objective(lambda x: self.f5(x))
         self.normalized_recall_func = self.get_normalized_objective(lambda x: self.f6(x))
 
-        super().__init__(*args, **kwargs)
+        super(IDSObjectiveFunction, self).__init__(*args, **kwargs)
+
+    def get_normalized_objective(self, objective_func):
+        empty_ruleset = IDSRuleSet(rules=set())
+        full_ruleset = self.rules
+
+        objective_max = objective_func(empty_ruleset)
+        objective_min = objective_func(full_ruleset)
+
+        def normalized_objective_func(solution_set):
+            objective_value = objective_func(solution_set)
+
+            normalized_objective = (objective_value - objective_min) / (objective_max - objective_min)
+
+            return normalized_objective
+
+        return normalized_objective_func
 
     def evaluate(self, solution_set: IDSRuleSet):
         if type(solution_set) != IDSRuleSet:

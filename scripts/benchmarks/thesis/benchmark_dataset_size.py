@@ -45,7 +45,7 @@ for train_file in train_files[:20]:
         cars = mine_CARs(df_train, rule_count)
 
         ids = IDS(algorithm=algorithm)
-        ids.fit(quant_dataframe=quant_df_train, class_association_rules=cars)
+        ids.fit(dataframe=quant_df_train, rules=cars)
 
         acc = ids.score(quant_df_test)
 

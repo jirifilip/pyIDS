@@ -1,1 +1,1 @@
-from .ids import *
+from .algorithms.ids import *

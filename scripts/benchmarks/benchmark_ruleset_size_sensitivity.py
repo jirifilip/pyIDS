@@ -164,7 +164,7 @@ for rule_count in range(0, max_rule_length + 1):
         time1 = time.time()
         lambda_array = [1.0]*7     # use separate hyperparamter search routine
         ids = IDS()
-        ids.fit(class_association_rules=current_cars, quant_dataframe=quant_df, debug=False)
+        ids.fit(rules=current_cars, dataframe=quant_df, debug=False)
 
         time2 = time.time()
 

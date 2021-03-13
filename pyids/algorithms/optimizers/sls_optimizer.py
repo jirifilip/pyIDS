@@ -3,9 +3,6 @@ import numpy as np
 import logging
 from typing import Iterable
 
-from pyarc.qcba.data_structures import QuantitativeDataFrame
-
-
 from .rs_optimizer import RSOptimizer
 from ...data_structures import IDSRuleSet
 from ...data_structures.rule import IDSRule
@@ -16,26 +13,18 @@ class SLSOptimizer:
     def __init__(
             self,
             objective_function,
-            dataframe: QuantitativeDataFrame,
-            rules: Iterable[IDSRule],
-            optimizer_args=dict(),
-            random_seed=None
+            rules: IDSRuleSet,
     ):
         self.delta = 0.33
 
         self.objective_function = objective_function
 
         self.rules = rules
-        self.dataframe = dataframe
 
-        self.rs_optimizer = RSOptimizer(rules.ruleset,
-                                        random_seed=random_seed)
+        self.rs_optimizer = RSOptimizer(rules.ruleset)
 
         self.logger = logging.getLogger(SLSOptimizer.__name__)
-        self.max_omega_iterations = optimizer_args.get("max_omega_iterations", 10000)
-
-        if random_seed:
-            np.random.seed(random_seed)
+        self.max_omega_iterations = 10000
 
     def compute_OPT(self):
         solution_set = self.rs_optimizer.optimize()

@@ -50,7 +50,7 @@ def objective(args):
     print(lambda_array)
 
     ids = IDS(algorithm="RUSM")
-    ids.fit(class_association_rules=cars, quant_dataframe=quant_dataframe, lambda_array=lambda_array)
+    ids.fit(rules=cars, dataframe=quant_dataframe, lambda_array=lambda_array)
 
     metrics = ids.score_interpretability_metrics(quant_dataframe)
 

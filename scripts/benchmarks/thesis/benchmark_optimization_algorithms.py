@@ -42,7 +42,7 @@ for rule_num in range(5, 105, 5):
 
             ids = IDS(algorithm=algorithm)
             start = time.time()
-            ids.fit(class_association_rules=cars, quant_dataframe=quant_df, lambda_array=lambda_array)
+            ids.fit(rules=cars, dataframe=quant_df, lambda_array=lambda_array)
             duration = time.time() - start
 
             print(f"duration: {duration}")

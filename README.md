@@ -39,7 +39,7 @@ lambda_array = [1, 1, 1, 1, 1, 1, 1]
 quant_dataframe = QuantitativeDataFrame(df)
 
 ids = IDS(algorithm="SLS")
-ids.fit(quant_dataframe=quant_dataframe, class_association_rules=cars, lambda_array=lambda_array)
+ids.fit(dataframe=quant_dataframe, rules=cars, lambda_array=lambda_array)
 
 acc = ids.score(quant_dataframe)
 ```
@@ -67,7 +67,7 @@ cars = mine_CARs(df, 20)
 def fmax(lambda_dict):
     print(lambda_dict)
     ids = IDS(algorithm="SLS")
-    ids.fit(class_association_rules=cars, quant_dataframe=quant_df, lambda_array=list(lambda_dict.values()))
+    ids.fit(rules=cars, dataframe=quant_df, lambda_array=list(lambda_dict.values()))
     auc = ids.score_auc(quant_df)
     print(auc)
     return auc

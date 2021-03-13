@@ -6,12 +6,13 @@ from pyarc.data_structures import ClassAssocationRule
 from sklearn.metrics import f1_score
 import numpy as np
 import xml.etree.ElementTree as ET
+from scipy import stats as st
 
 
 class IDSRule:
 
     DUMMY_LABEL = "N/A"
-    
+
     def __init__(self, class_association_rule: ClassAssocationRule):
         self.car = class_association_rule
         self.cover_cache = dict(
@@ -247,6 +248,9 @@ class IDSRuleSet:
 
     def __len__(self):
         return len(self.ruleset)
+
+    def __iter__(self):
+        return self.ruleset
 
     def sum_rule_length(self):
         rule_lens = []

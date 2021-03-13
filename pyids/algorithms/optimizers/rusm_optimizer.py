@@ -15,18 +15,11 @@ class RandomizedUSMOptimizer:
     def __init__(
             self,
             objective_function: IDSObjectiveFunction,
-            dataframe: QuantitativeDataFrame,
-            rules: Iterable[IDSRule],
-            optimizer_args=dict(),
-            random_seed=None
+            rules: IDSRuleSet,
     ):
         self.objective_function = objective_function
-        self.dataframe = dataframe
         self.rules = rules
         self.logger = logging.getLogger(RandomizedUSMOptimizer.__name__)
-
-        if random_seed:
-            np.random.seed(random_seed)
 
     def optimize(self):
         x0 = IDSRuleSet(set())

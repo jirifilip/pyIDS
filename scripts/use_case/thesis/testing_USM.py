@@ -16,7 +16,7 @@ quant_dataframe = QuantitativeDataFrame(df)
 
 start = time.time()
 ids = IDS(algorithm="RUSM")
-ids.fit(class_association_rules=cars, quant_dataframe=quant_dataframe, random_seed=None, lambda_array=[1, 1, 1, 1, 1, 1, 1000000000])
+ids.fit(rules=cars, dataframe=quant_dataframe, random_seed=None, lambda_array=[1, 1, 1, 1, 1, 1, 1000000000])
 end = time.time()
 
 print(end - start)

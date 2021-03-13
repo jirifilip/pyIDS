@@ -37,7 +37,7 @@ def solution_interpretability_distance(metrics):
 def fmax(lambda_dict):
     print(lambda_dict)
     ids = IDS(algorithm="SLS")
-    ids.fit(class_association_rules=cars, quant_dataframe=quant_df, lambda_array=list(lambda_dict.values()))
+    ids.fit(rules=cars, dataframe=quant_df, lambda_array=list(lambda_dict.values()))
 
     metrics = ids.score_interpretability_metrics(quant_df)
 

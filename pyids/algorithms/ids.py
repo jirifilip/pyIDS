@@ -1,6 +1,7 @@
 from pyarc.qcba.data_structures import QuantitativeDataFrame
+from pyarc.data_structures import ClassAssocationRule
 
-from .objective_function import IDSObjectiveFunction, ObjectiveFunctionParameters
+from .objective_function import IDSObjectiveFunction, ObjectiveFunction
 
 from ..data_structures.rule import IDSRule
 from ..data_structures import IDSRuleSet
@@ -17,77 +18,82 @@ from sklearn.metrics import accuracy_score, roc_auc_score
 
 import logging
 import numpy as np
+from typing import Iterable
 
 
 class IDS:
 
-    def __init__(self, algorithm="SLS"):
+    def __init__(self):
         self.clf: IDSClassifier = None
-        self.cacher = None
-        self.ids_ruleset = None
-        self.algorithms = dict(
-            SLS=SLSOptimizer,
-            DLS=DLSOptimizer,
-            DUSM=DeterministicUSMOptimizer,
-            RUSM=RandomizedUSMOptimizer
-        )
+        self.dataframe: QuantitativeDataFrame = None
+        self.ruleset: IDSRuleSet = None
+        self.lambda_array = None
+        self.objective_function = None
+        self.optimizer = None
+        self.default_class = None
 
-        self.algorithm = algorithm
         self.logger = logging.getLogger(IDS.__name__)
+
+    def __get_objective_function(self, *, objective):
+        if objective == "ids":
+            return IDSObjectiveFunction(
+                dataframe=self.dataframe,
+                rules=self.ruleset,
+                lambda_array=self.lambda_array
+            )
+        elif isinstance(objective, ObjectiveFunction):
+            return objective
+        else:
+            raise ValueError("Could not process specified objective function.")
+
+    def __get_optimizer(self, *, optimizer):
+        if optimizer == "sls":
+            return SLSOptimizer(rules=self.ruleset, objective_function=self.objective_function)
+        elif optimizer == "rusm":
+            return RandomizedUSMOptimizer(rules=self.ruleset, objective_function=self.objective_function)
 
     def fit(
             self,
-            quant_dataframe,
-            class_association_rules=None,
+            dataframe: QuantitativeDataFrame,
+            rules: Iterable[ClassAssocationRule],
             lambda_array=7*[1],
+            objective="ids",
+            optimizer="sls",
             default_class="majority_class_in_uncovered",
-            optimizer_args=dict(),
-            random_seed=None
     ):
-        if type(quant_dataframe) != QuantitativeDataFrame:
+        if type(dataframe) != QuantitativeDataFrame:
             raise Exception("Type of quant_dataframe must be QuantitativeDataFrame")
 
-        if not self.ids_ruleset:
-            ids_rules = list(map(IDSRule, class_association_rules))
-            all_rules = IDSRuleSet(ids_rules)
-        elif self.ids_ruleset and not class_association_rules:
-            all_rules = self.ids_ruleset
+        self.dataframe = dataframe
+        self.ruleset = IDSRuleSet([ IDSRule(rule) for rule in rules ])
+        self.lambda_array = lambda_array
+        self.default_class = default_class
 
-        # objective function
-        objective_function = IDSObjectiveFunction(
-            dataframe=quant_dataframe,
-            rules=all_rules,
-            lambda_array=lambda_array,
-            cacher=self.cacher
-        )
+        self.objective_function = self.__get_objective_function(objective=objective)
+        self.optimizer = self.__get_optimizer(optimizer=optimizer)
 
-        optimizer = self.algorithms[self.algorithm](
-            objective_function,
-            quant_dataframe=quant_dataframe,
-            rules=all_rules,
-            random_seed=random_seed,
-            optimizer_args=optimizer_args
-        )
-
-        solution_set = optimizer.optimize()
+        solution_set = self.optimizer.optimize()
 
         self.logger.debug("Solution set optimized")
 
+        self.__create_classifier(solution_set)
+
+        return self
+
+    def __create_classifier(self, solution_set):
         self.clf = IDSClassifier(solution_set)
         self.clf.rules = sorted(self.clf.rules, reverse=True)
-        self.clf.quant_dataframe_train = quant_dataframe
+        self.clf.quant_dataframe_train = self.dataframe
 
-        if default_class == "majority_class_in_all":
-            classes = quant_dataframe.dataframe.iloc[:, -1]
+        if self.default_class == "majority_class_in_all":
+            classes = self.dataframe.dataframe.iloc[:, -1]
             self.clf.default_class = mode(classes)
             self.clf.default_class_confidence = classes.count(self.clf.default_class) / len(classes)
-        elif default_class == "majority_class_in_uncovered":
+        elif self.default_class == "majority_class_in_uncovered":
             self.clf.calculate_default_class()
 
         self.logger.debug(f"Chosen default class: {self.clf.default_class}")
         self.logger.debug(f"Default class confidence: {self.clf.default_class_confidence}")
-
-        return self
 
     def predict(self, quant_dataframe: QuantitativeDataFrame, order_type="f1"):
         return self.clf.predict(quant_dataframe, order_type=order_type)
